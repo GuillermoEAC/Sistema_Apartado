@@ -1,0 +1,21 @@
+Create database sis_computo;
+
+use sis_computo;
+
+CREATE TABLE IF NOT exists Usuario(
+	id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    nombre varchar(50) not null,
+    apellido1 varchar(20) not null,
+    apellido2 varchar(20) null
+);
+
+CREATE TABLE IF NOT EXISTS Notificacion (
+    id_notificacion INT PRIMARY KEY AUTO_INCREMENT,
+    tipo_notificacion VARCHAR(50), 
+    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT exists Centro_Computo(
+	id_centrocomputo INT PRIMARY KEY AUTO_INCREMENT,
+	num_cc smallint
+);
