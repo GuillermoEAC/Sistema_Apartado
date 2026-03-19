@@ -1,0 +1,55 @@
+<section class="home-publica">
+    <div class="encabezado">
+        <div>
+            <h2>Calendario público</h2>
+            <p>Consulta la disponibilidad general de la sala de cómputo.</p>
+        </div>
+
+        <a routerLink="/login" class="boton-principal">
+            Inicia sesión para solicitar una reserva
+        </a>
+    </div>
+
+    <div class="leyenda">
+        <span class="item disponible">Disponible</span>
+        <span class="item reservado">Reservado</span>
+        <span class="item pendiente">Pendiente</span>
+        <span class="item bloqueado">Bloqueado</span>
+    </div>
+
+    <div class="calendario-preview" *ngIf="esNavegador; else sinCalendario">
+        <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+
+    <div class="panel-informacion">
+        <article class="info-card">
+            <h3>Vista pública</h3>
+            <p>
+                Este calendario muestra únicamente la disponibilidad general de la sala
+                de cómputo.
+            </p>
+        </article>
+
+        <article class="info-card">
+            <h3>Reservas con acceso</h3>
+            <p>
+                Para solicitar, cancelar o reprogramar una reserva es necesario iniciar
+                sesión como profesor o administrador.
+            </p>
+        </article>
+
+        <article class="info-card">
+            <h3>Privacidad</h3>
+            <p>
+                Los eventos visibles en esta pantalla son anónimos y no muestran datos
+                personales de los solicitantes.
+            </p>
+        </article>
+    </div>
+
+    <ng-template #sinCalendario>
+        <div class="calendario-preview">
+            <p>Cargando calendario...</p>
+        </div>
+    </ng-template>
+</section>

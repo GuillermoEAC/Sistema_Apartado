@@ -1,0 +1,27 @@
+<div class="layout-profesor">
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>Sistema</h2>
+            <p>Profesor</p>
+        </div>
+
+        <nav class="menu">
+            <a routerLink="/app/dashboard">Dashboard</a>
+            <a routerLink="/app/request">Nueva solicitud</a>
+            <a routerLink="/app/calendar">Calendario</a>
+            <a routerLink="/app/reservations">Mis reservas</a>
+            <a routerLink="/app/history">Historial</a>
+            <a routerLink="/app/attendance">Asistencia</a>
+        </nav>
+    </aside>
+
+    <section class="panel-principal">
+        <header class="topbar">
+            <h1>Panel del profesor</h1>
+        </header>
+
+        <main class="contenido">
+            <router-outlet></router-outlet>
+        </main>
+    </section>
+</div>

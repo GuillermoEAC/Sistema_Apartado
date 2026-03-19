@@ -1,0 +1,140 @@
+.dashboard-admin {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.encabezado h2 {
+    margin: 0 0 8px;
+    font-size: 1.9rem;
+    color: #0f172a;
+}
+
+.encabezado p {
+    margin: 0;
+    color: #64748b;
+}
+
+.tarjetas-resumen {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.tarjeta {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 20px;
+}
+
+.etiqueta {
+    display: block;
+    margin-bottom: 10px;
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+.tarjeta strong {
+    font-size: 1.6rem;
+    color: #111827;
+}
+
+.contenido-dashboard {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 20px;
+}
+
+.panel {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 20px;
+}
+
+.panel-header {
+    margin-bottom: 18px;
+}
+
+.panel-header h3 {
+    margin: 0;
+    color: #111827;
+}
+
+.acciones-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.accion-card {
+    display: block;
+    text-decoration: none;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 18px;
+    color: inherit;
+}
+
+.accion-card h4 {
+    margin: 0 0 8px;
+    color: #111827;
+}
+
+.accion-card p {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.lista-actividad {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.actividad-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+}
+
+.actividad-item h4 {
+    margin: 0 0 6px;
+    color: #111827;
+}
+
+.actividad-item p {
+    margin: 0;
+    color: #6b7280;
+}
+
+.estado {
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.estado.aprobado {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.estado.bloqueado {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.estado.cancelado {
+    background: #fef3c7;
+    color: #b45309;
+}

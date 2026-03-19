@@ -1,0 +1,149 @@
+.solicitud-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.encabezado h2 {
+    margin: 0 0 8px;
+    font-size: 1.9rem;
+    color: #0f172a;
+}
+
+.encabezado p {
+    margin: 0;
+    color: #64748b;
+}
+
+.contenedor-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.bloque {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 20px;
+}
+
+.bloque h3 {
+    margin: 0 0 18px;
+    color: #0f172a;
+}
+
+.grid-formulario {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.campo-completo {
+    grid-column: 1 / -1;
+}
+
+.campo label {
+    font-weight: 600;
+    color: #334155;
+}
+
+.campo input,
+.campo textarea {
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+}
+
+.requerimientos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.requerimientos label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+.tabla-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.tabla-header h3 {
+    margin: 0;
+}
+
+.tabla-horarios {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.fila {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.encabezado-tabla {
+    font-weight: 700;
+    color: #334155;
+}
+
+.fila input {
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.boton-secundario {
+    border: none;
+    background: #e0e7ff;
+    color: #1e3a8a;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.boton-eliminar {
+    border: none;
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.acciones {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.boton-principal {
+    border: none;
+    background: #1e3a8a;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}

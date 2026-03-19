@@ -1,0 +1,27 @@
+<div class="layout-admin">
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>Sistema</h2>
+            <p>Administrador</p>
+        </div>
+
+        <nav class="menu">
+            <a routerLink="/admin/dashboard">Dashboard</a>
+            <a routerLink="/admin/requests">Solicitudes</a>
+            <a routerLink="/admin/calendar">Calendario</a>
+            <a routerLink="/admin/users">Usuarios</a>
+            <a routerLink="/admin/blocks">Bloqueos</a>
+            <a routerLink="/admin/history">Historial</a>
+        </nav>
+    </aside>
+
+    <section class="panel-principal">
+        <header class="topbar">
+            <h1>Panel administrativo</h1>
+        </header>
+
+        <main class="contenido">
+            <router-outlet></router-outlet>
+        </main>
+    </section>
+</div>

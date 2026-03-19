@@ -1,0 +1,50 @@
+.historial-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.encabezado h2 {
+    margin: 0 0 8px;
+    font-size: 1.9rem;
+}
+
+.encabezado p {
+    margin: 0;
+    color: #64748b;
+}
+
+.tabla {
+    background: white;
+    border-radius: 18px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.fila {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 14px 18px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.encabezado {
+    font-weight: 700;
+    background: #f8fafc;
+}
+
+.estado {
+    font-weight: 700;
+}
+
+.estado.completado {
+    color: #15803d;
+}
+
+.estado.cancelado {
+    color: #b91c1c;
+}
+
+.estado.no-asistio {
+    color: #64748b;
+}

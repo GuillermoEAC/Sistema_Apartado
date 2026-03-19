@@ -1,0 +1,52 @@
+.asistencia-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.encabezado h2 {
+    margin: 0 0 8px;
+    font-size: 1.9rem;
+    color: #0f172a;
+}
+
+.encabezado p {
+    margin: 0;
+    color: #64748b;
+}
+
+.tarjeta-asistencia {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+}
+
+.info-principal h3 {
+    margin: 0 0 16px;
+    color: #0f172a;
+}
+
+.info-principal p {
+    margin: 0 0 10px;
+    color: #475569;
+}
+
+.acciones {
+    display: flex;
+    align-items: center;
+}
+
+.boton-confirmar {
+    border: none;
+    background: #15803d;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}

@@ -1,0 +1,102 @@
+<section class="solicitud-page">
+    <div class="encabezado">
+        <h2>Nueva solicitud</h2>
+        <p>Completa la información para solicitar el uso de la sala de cómputo.</p>
+    </div>
+
+    <div class="contenedor-formulario">
+        <section class="bloque">
+            <h3>Datos del solicitante</h3>
+
+            <div class="grid-formulario">
+                <div class="campo">
+                    <label for="nombre">Nombre del solicitante</label>
+                    <input id="nombre" type="text" placeholder="Nombre completo" />
+                </div>
+
+                <div class="campo">
+                    <label for="correo">Correo institucional</label>
+                    <input id="correo" type="email" placeholder="correo@institucion.edu.mx" />
+                </div>
+
+                <div class="campo">
+                    <label for="telefono">Teléfono</label>
+                    <input id="telefono" type="text" placeholder="6671234567" />
+                </div>
+
+                <div class="campo">
+                    <label for="facultad">Facultad o unidad académica</label>
+                    <input id="facultad" type="text" placeholder="Nombre de la facultad" />
+                </div>
+            </div>
+        </section>
+
+        <section class="bloque">
+            <h3>Información de uso</h3>
+
+            <div class="grid-formulario">
+                <div class="campo campo-completo">
+                    <label for="motivo">Motivo de uso</label>
+                    <textarea id="motivo" rows="4" placeholder="Describe el motivo de la solicitud"></textarea>
+                </div>
+
+                <div class="campo">
+                    <label for="grupo">Grupo o carrera</label>
+                    <input id="grupo" type="text" placeholder="Ej. Sistemas 4A" />
+                </div>
+
+                <div class="campo">
+                    <label for="alumnos">Número de alumnos</label>
+                    <input id="alumnos" type="number" placeholder="30" />
+                </div>
+            </div>
+        </section>
+
+        <section class="bloque">
+            <h3>Requerimientos</h3>
+
+            <div class="requerimientos">
+                <label><input type="checkbox" /> Internet</label>
+                <label><input type="checkbox" /> Equipo de cómputo</label>
+                <label><input type="checkbox" /> Proyector</label>
+                <label><input type="checkbox" /> Software especializado</label>
+            </div>
+        </section>
+
+        <section class="bloque">
+            <div class="tabla-header">
+                <h3>Fechas y horarios</h3>
+                <button type="button" class="boton-secundario">Agregar horario</button>
+            </div>
+
+            <div class="tabla-horarios">
+                <div class="fila encabezado-tabla">
+                    <span>Fecha</span>
+                    <span>Hora inicio</span>
+                    <span>Hora fin</span>
+                    <span>Acción</span>
+                </div>
+
+                <div class="fila">
+                    <input type="date" />
+                    <input type="time" />
+                    <input type="time" />
+                    <button type="button" class="boton-eliminar">Eliminar</button>
+                </div>
+
+                <div class="fila">
+                    <input type="date" />
+                    <input type="time" />
+                    <input type="time" />
+                    <button type="button" class="boton-eliminar">Eliminar</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="acciones">
+            <button type="button" class="boton-principal" (click)="enviarSolicitud()">
+                Enviar solicitud
+            </button>
+        </div>
+    </div>
+</section>

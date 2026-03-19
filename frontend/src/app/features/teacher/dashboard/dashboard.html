@@ -1,0 +1,92 @@
+<section class="dashboard-profesor">
+    <div class="encabezado">
+        <div>
+            <h2>Bienvenido, profesor</h2>
+            <p>Consulta tu actividad reciente y accede rápidamente a las funciones del sistema.</p>
+        </div>
+    </div>
+
+    <div class="tarjetas-resumen">
+        <article class="tarjeta">
+            <span class="etiqueta">Reservas activas</span>
+            <strong>3</strong>
+        </article>
+
+        <article class="tarjeta">
+            <span class="etiqueta">Solicitudes pendientes</span>
+            <strong>2</strong>
+        </article>
+
+        <article class="tarjeta">
+            <span class="etiqueta">Próxima reserva</span>
+            <strong>20 mar · 10:00</strong>
+        </article>
+
+        <article class="tarjeta">
+            <span class="etiqueta">Historial reciente</span>
+            <strong>8 registros</strong>
+        </article>
+    </div>
+
+    <div class="contenido-dashboard">
+        <section class="panel">
+            <div class="panel-header">
+                <h3>Accesos rápidos</h3>
+            </div>
+
+            <div class="acciones-grid">
+                <a routerLink="/app/request" class="accion-card">
+                    <h4>Nueva solicitud</h4>
+                    <p>Registra una nueva solicitud para uso de la sala.</p>
+                </a>
+
+                <a routerLink="/app/calendar" class="accion-card">
+                    <h4>Calendario</h4>
+                    <p>Consulta disponibilidad y horarios ocupados.</p>
+                </a>
+
+                <a routerLink="/app/reservations" class="accion-card">
+                    <h4>Mis reservas</h4>
+                    <p>Administra tus reservas activas y futuras.</p>
+                </a>
+
+                <a routerLink="/app/history" class="accion-card">
+                    <h4>Historial</h4>
+                    <p>Revisa reservas pasadas y movimientos anteriores.</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <h3>Próximas reservas</h3>
+            </div>
+
+            <div class="lista-reservas">
+                <article class="reserva-item">
+                    <div>
+                        <h4>Laboratorio de programación</h4>
+                        <p>Grupo 4A · 20 de marzo · 10:00 a 12:00</p>
+                    </div>
+                    <span class="estado activo">Activa</span>
+                </article>
+
+                <article class="reserva-item">
+                    <div>
+                        <h4>Uso académico</h4>
+                        <p>Grupo 2B · 22 de marzo · 08:00 a 10:00</p>
+                    </div>
+                    <span class="estado pendiente">Pendiente</span>
+                </article>
+
+                <article class="reserva-item">
+                    <div>
+                        <h4>Práctica de cómputo</h4>
+                        <p>Grupo 6C · 25 de marzo · 12:00 a 14:00</p>
+                    </div>
+                    <span class="estado programada">Programada</span>
+                </article>
+            </div>
+        </section>
+    </div>
+</section>

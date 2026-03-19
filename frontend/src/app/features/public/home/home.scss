@@ -1,0 +1,175 @@
+.home-publica {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.encabezado h2 {
+    margin: 0 0 8px;
+    font-size: 2rem;
+}
+
+.encabezado p {
+    margin: 0;
+    color: #475569;
+}
+
+.boton-principal {
+    background: #1e3a8a;
+    color: white;
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.leyenda {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.item {
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.disponible {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.reservado {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.pendiente {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.bloqueado {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.calendario-preview {
+    background: white;
+    border-radius: 18px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+}
+
+.barra-superior {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.barra-superior h3 {
+    margin: 0;
+}
+
+.grid-calendario {
+    display: grid;
+    grid-template-columns: 120px repeat(4, 1fr);
+    gap: 12px;
+}
+
+.hora {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    color: #334155;
+}
+
+.slot {
+    padding: 16px;
+    border-radius: 12px;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 600;
+}
+
+:host ::ng-deep .fc {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+:host ::ng-deep .fc .fc-toolbar-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+:host ::ng-deep .fc .fc-button {
+    background: #1e3a8a;
+    border: none;
+    text-transform: none;
+    font-weight: 600;
+}
+
+:host ::ng-deep .fc .fc-button:hover {
+    background: #1d4ed8;
+}
+
+:host ::ng-deep .fc .fc-button-primary:not(:disabled).fc-button-active {
+    background: #0f172a;
+}
+
+:host ::ng-deep .fc-theme-standard td,
+:host ::ng-deep .fc-theme-standard th,
+:host ::ng-deep .fc-theme-standard .fc-scrollgrid {
+    border-color: #e2e8f0;
+}
+
+:host ::ng-deep .fc .fc-timegrid-slot {
+    height: 52px;
+}
+
+:host ::ng-deep .fc .fc-event {
+    border: none;
+    border-radius: 10px;
+    padding: 4px 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.panel-informacion {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.info-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.info-card h3 {
+    margin: 0 0 10px;
+    font-size: 1rem;
+    color: #0f172a;
+}
+
+.info-card p {
+    margin: 0;
+    color: #475569;
+    line-height: 1.5;
+}

@@ -1,0 +1,140 @@
+.dashboard-profesor {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.encabezado h2 {
+    margin: 0 0 8px;
+    font-size: 1.9rem;
+    color: #0f172a;
+}
+
+.encabezado p {
+    margin: 0;
+    color: #64748b;
+}
+
+.tarjetas-resumen {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.tarjeta {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 20px;
+}
+
+.etiqueta {
+    display: block;
+    margin-bottom: 10px;
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+.tarjeta strong {
+    font-size: 1.6rem;
+    color: #0f172a;
+}
+
+.contenido-dashboard {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 20px;
+}
+
+.panel {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 20px;
+}
+
+.panel-header {
+    margin-bottom: 18px;
+}
+
+.panel-header h3 {
+    margin: 0;
+    color: #0f172a;
+}
+
+.acciones-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.accion-card {
+    display: block;
+    text-decoration: none;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 18px;
+    color: inherit;
+}
+
+.accion-card h4 {
+    margin: 0 0 8px;
+    color: #0f172a;
+}
+
+.accion-card p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.lista-reservas {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.reserva-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.reserva-item h4 {
+    margin: 0 0 6px;
+    color: #0f172a;
+}
+
+.reserva-item p {
+    margin: 0;
+    color: #64748b;
+}
+
+.estado {
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.estado.activo {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.estado.pendiente {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.estado.programada {
+    background: #dcfce7;
+    color: #15803d;
+}

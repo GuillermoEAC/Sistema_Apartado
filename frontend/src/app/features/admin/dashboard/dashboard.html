@@ -1,0 +1,92 @@
+<section class="dashboard-admin">
+    <div class="encabezado">
+        <div>
+            <h2>Resumen administrativo</h2>
+            <p>Supervisa solicitudes, reservas, usuarios y bloqueos del sistema.</p>
+        </div>
+    </div>
+
+    <div class="tarjetas-resumen">
+        <article class="tarjeta">
+            <span class="etiqueta">Solicitudes pendientes</span>
+            <strong>8</strong>
+        </article>
+
+        <article class="tarjeta">
+            <span class="etiqueta">Reservas del día</span>
+            <strong>12</strong>
+        </article>
+
+        <article class="tarjeta">
+            <span class="etiqueta">Horarios bloqueados</span>
+            <strong>4</strong>
+        </article>
+
+        <article class="tarjeta">
+            <span class="etiqueta">Usuarios activos</span>
+            <strong>27</strong>
+        </article>
+    </div>
+
+    <div class="contenido-dashboard">
+        <section class="panel">
+            <div class="panel-header">
+                <h3>Accesos rápidos</h3>
+            </div>
+
+            <div class="acciones-grid">
+                <a routerLink="/admin/requests" class="accion-card">
+                    <h4>Solicitudes</h4>
+                    <p>Revisa, aprueba o rechaza solicitudes de reserva.</p>
+                </a>
+
+                <a routerLink="/admin/calendar" class="accion-card">
+                    <h4>Calendario global</h4>
+                    <p>Visualiza la ocupación completa de la sala.</p>
+                </a>
+
+                <a routerLink="/admin/users" class="accion-card">
+                    <h4>Usuarios</h4>
+                    <p>Consulta los usuarios registrados en el sistema.</p>
+                </a>
+
+                <a routerLink="/admin/blocks" class="accion-card">
+                    <h4>Bloqueo de horarios</h4>
+                    <p>Gestiona horarios no disponibles para reservación.</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <h3>Actividad reciente</h3>
+            </div>
+
+            <div class="lista-actividad">
+                <article class="actividad-item">
+                    <div>
+                        <h4>Solicitud aprobada</h4>
+                        <p>Profesor Juan Pérez · 20 de marzo · 10:00 a 12:00</p>
+                    </div>
+                    <span class="estado aprobado">Aprobada</span>
+                </article>
+
+                <article class="actividad-item">
+                    <div>
+                        <h4>Horario bloqueado</h4>
+                        <p>Mantenimiento del aula · 22 de marzo · 08:00 a 10:00</p>
+                    </div>
+                    <span class="estado bloqueado">Bloqueado</span>
+                </article>
+
+                <article class="actividad-item">
+                    <div>
+                        <h4>Reserva cancelada</h4>
+                        <p>Profesor Ana López · 25 de marzo · 12:00 a 14:00</p>
+                    </div>
+                    <span class="estado cancelado">Cancelada</span>
+                </article>
+            </div>
+        </section>
+    </div>
+</section>

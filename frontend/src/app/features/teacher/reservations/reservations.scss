@@ -1,0 +1,90 @@
+.reservas-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.encabezado h2 {
+    margin: 0 0 8px;
+    font-size: 1.9rem;
+}
+
+.encabezado p {
+    margin: 0;
+    color: #64748b;
+}
+
+.lista-reservas {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.reserva-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 18px;
+}
+
+.info h3 {
+    margin: 0 0 6px;
+    color: #0f172a;
+}
+
+.info p {
+    margin: 0;
+    color: #64748b;
+}
+
+.acciones {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.estado {
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.estado.activa {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.estado.pendiente {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.estado.programada {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.btn-secundario {
+    border: none;
+    background: #e0e7ff;
+    color: #1e3a8a;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-peligro {
+    border: none;
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
