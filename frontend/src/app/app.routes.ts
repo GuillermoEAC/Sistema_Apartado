@@ -24,6 +24,12 @@ export const routes: Routes = [
     },
 
     {
+        path: 'register',
+        loadComponent: () =>
+            import('./features/auth/register/register').then((m) => m.RegisterComponent),
+    },
+
+    {
         path: 'app',
         component: TeacherLayout,
         children: [

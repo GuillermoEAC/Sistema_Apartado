@@ -1,42 +1,38 @@
 <section class="login-page">
-    <div class="login-card">
-        <div class="encabezado-login">
-            <h2>Iniciar sesión</h2>
-            <p>Accede al sistema para gestionar reservas de la sala de cómputo.</p>
-        </div>
-
-        <form class="formulario-login">
-            <div class="campo">
-                <label for="correo">Correo institucional</label>
-                <input id="correo" type="email" placeholder="nombre@institucion.edu.mx" />
-            </div>
-
-            <div class="campo">
-                <label for="contrasena">Contraseña</label>
-                <input id="contrasena" type="password" placeholder="Ingresa tu contraseña" />
-            </div>
-
-            <button type="button" class="boton-principal">
-                Iniciar sesión
-            </button>
-        </form>
-
-        <div class="accesos-demo">
-            <p>Accesos rápidos de prueba</p>
-
-            <div class="botones-demo">
-                <a routerLink="/app/dashboard" class="boton-secundario">
-                    Entrar como profesor
-                </a>
-
-                <a routerLink="/admin/dashboard" class="boton-secundario admin">
-                    Entrar como administrador
-                </a>
+    <div class="login-wrapper">
+        <div class="login-header-card">
+            <div class="header-texto">
+                <h2>Iniciar sesión</h2>
+                <p>Accede al sistema para gestionar reservas de la sala de cómputo.</p>
             </div>
         </div>
 
-        <div class="volver">
-            <a routerLink="/">Volver al calendario público</a>
+        <div class="login-card">
+            <div class="login-card-header">
+                <h3>Bienvenido</h3>
+                <p>Ingresa con tu correo institucional y contraseña.</p>
+            </div>
+
+            <form class="formulario-login">
+                <div class="campo">
+                    <label for="correo">Correo institucional</label>
+                    <input id="correo" type="email" placeholder="nombre@uas.edu.mx" />
+                </div>
+
+                <div class="campo">
+                    <label for="contrasena">Contraseña</label>
+                    <input id="contrasena" type="password" placeholder="Ingresa tu contraseña" />
+                </div>
+
+                <button type="button" class="boton-principal">
+                    Iniciar sesión
+                </button>
+            </form>
+
+            <div class="acciones-extra">
+                <a routerLink="/" class="volver-link">Volver al calendario público</a>
+                <a routerLink="/register" class="registro-link">Crear cuenta como profesor</a>
+            </div>
         </div>
     </div>
 </section>

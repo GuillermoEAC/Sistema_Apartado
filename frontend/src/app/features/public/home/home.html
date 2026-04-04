@@ -1,55 +1,81 @@
 <section class="home-publica">
-    <div class="encabezado">
-        <div>
-            <h2>Calendario público</h2>
-            <p>Consulta la disponibilidad general de la sala de cómputo.</p>
+    <header class="encabezado">
+        <div class="encabezado-texto">
+            <h2>Calendario de Reservas</h2>
+            <p>Consulta la disponibilidad general de la sala de cómputo en tiempo real.</p>
         </div>
 
         <a routerLink="/login" class="boton-principal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                <polyline points="10 17 15 12 10 7"></polyline>
+                <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
             Inicia sesión para solicitar una reserva
         </a>
-    </div>
+    </header>
 
-    <div class="leyenda">
-        <span class="item disponible">Disponible</span>
-        <span class="item reservado">Reservado</span>
-        <span class="item pendiente">Pendiente</span>
-        <span class="item bloqueado">Bloqueado</span>
-    </div>
+    <div class="contenido-principal">
+        <div class="columna-calendario">
+            <div class="leyenda-container">
+                <div class="leyenda">
+                    <span class="item disponible"><span class="dot"></span> Disponible</span>
+                    <span class="item reservado"><span class="dot"></span> Reservado</span>
+                    <span class="item pendiente"><span class="dot"></span> Pendiente</span>
+                    <span class="item bloqueado"><span class="dot"></span> Bloqueado</span>
+                </div>
+            </div>
 
-    <div class="calendario-preview" *ngIf="esNavegador; else sinCalendario">
-        <full-calendar [options]="calendarOptions"></full-calendar>
-    </div>
+            <div class="calendario-preview" *ngIf="esNavegador; else sinCalendario">
+                <full-calendar [options]="calendarOptions"></full-calendar>
+            </div>
 
-    <div class="panel-informacion">
-        <article class="info-card">
-            <h3>Vista pública</h3>
-            <p>
-                Este calendario muestra únicamente la disponibilidad general de la sala
-                de cómputo.
-            </p>
-        </article>
-
-        <article class="info-card">
-            <h3>Reservas con acceso</h3>
-            <p>
-                Para solicitar, cancelar o reprogramar una reserva es necesario iniciar
-                sesión como profesor o administrador.
-            </p>
-        </article>
-
-        <article class="info-card">
-            <h3>Privacidad</h3>
-            <p>
-                Los eventos visibles en esta pantalla son anónimos y no muestran datos
-                personales de los solicitantes.
-            </p>
-        </article>
-    </div>
-
-    <ng-template #sinCalendario>
-        <div class="calendario-preview">
-            <p>Cargando calendario...</p>
+            <ng-template #sinCalendario>
+                <div class="calendario-preview calendario-cargando">
+                    <div class="loader"></div>
+                    <p>Cargando calendario...</p>
+                </div>
+            </ng-template>
         </div>
-    </ng-template>
+
+        <aside class="columna-info">
+            <article class="info-card">
+                <div class="icon-wrapper public">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </div>
+                <div class="card-content">
+                    <h3>Vista pública</h3>
+                    <p>Este calendario muestra únicamente la disponibilidad general de la sala de cómputo.</p>
+                </div>
+            </article>
+
+            <article class="info-card">
+                <div class="icon-wrapper access">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </div>
+                <div class="card-content">
+                    <h3>Reservas con acceso</h3>
+                    <p>Para solicitar, cancelar o reprogramar una reserva es necesario iniciar sesión como profesor o administrador.</p>
+                </div>
+            </article>
+
+            <article class="info-card">
+                <div class="icon-wrapper privacy">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                </div>
+                <div class="card-content">
+                    <h3>Privacidad</h3>
+                    <p>Los eventos visibles en esta pantalla son anónimos y no muestran datos personales de los solicitantes.</p>
+                </div>
+            </article>
+        </aside>
+    </div>
 </section>

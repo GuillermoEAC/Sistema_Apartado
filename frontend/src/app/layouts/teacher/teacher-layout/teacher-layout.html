@@ -1,23 +1,90 @@
 <div class="layout-profesor">
     <aside class="sidebar">
-        <div class="logo">
-            <h2>Sistema</h2>
-            <p>Profesor</p>
+        <!-- 2. Bloque superior: Identidad visual -->
+        <div class="sidebar-header">
+            <div class="logo-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+            </div>
+            <div class="system-title">
+                <h2>Sala de Cómputo</h2>
+                <span class="badge-role">Profesor</span>
+            </div>
         </div>
 
-        <nav class="menu">
-            <a routerLink="/app/dashboard">Dashboard</a>
-            <a routerLink="/app/request">Nueva solicitud</a>
-            <a routerLink="/app/calendar">Calendario</a>
-            <a routerLink="/app/reservations">Mis reservas</a>
-            <a routerLink="/app/history">Historial</a>
-            <a routerLink="/app/attendance">Asistencia</a>
-        </nav>
+        <!-- 3. Items de navegación -->
+        <div class="sidebar-body">
+            <nav class="menu">
+                <a routerLink="/app/dashboard" routerLinkActive="active">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a routerLink="/app/request" routerLinkActive="active">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"></path>
+                    </svg>
+                    <span>Nueva solicitud</span>
+                </a>
+                <a routerLink="/app/calendar" routerLinkActive="active">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>Calendario</span>
+                </a>
+                <a routerLink="/app/reservations" routerLinkActive="active">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span>Mis reservas</span>
+                </a>
+                <a routerLink="/app/history" routerLinkActive="active">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>Historial</span>
+                </a>
+                <a routerLink="/app/attendance" routerLinkActive="active">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span>Asistencia</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- 6. Parte inferior -->
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="avatar">P</div>
+                <div class="user-info">
+                    <span class="user-name">Docente</span>
+                    <span class="user-email">Sesión activa</span>
+                </div>
+            </div>
+        </div>
     </aside>
 
     <section class="panel-principal">
         <header class="topbar">
-            <h1>Panel del profesor</h1>
+            <div class="topbar-content">
+                <h1>Panel del profesor</h1>
+            </div>
         </header>
 
         <main class="contenido">
