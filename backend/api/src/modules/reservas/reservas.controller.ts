@@ -1,8 +1,8 @@
 import {
     Controller, Get, Patch, Param, Body,
-    UseGuards, Request, ParseIntPipe,
+    UseGuards, Request, ParseIntPipe, Query,
 } from '@nestjs/common';
-import { ReservasService, RescheduleDto, AttendanceDto } from './reservas.service';
+import { ReservasService, RescheduleDto, AttendanceDto, CheckDisponibilidadDto } from './reservas.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -31,6 +31,12 @@ export class ReservasController {
     @ApiOperation({ summary: 'Todas las reservas (Admin)' })
     findAll() {
         return this.service.findAll();
+    }
+
+    @Get('disponibilidad')
+    @ApiOperation({ summary: 'Validar disponibilidad de un centro en una fecha y horario' })
+    checkDisponibilidad(@Query() dto: CheckDisponibilidadDto) {
+        return this.service.checkDisponibilidad(dto);
     }
 
     @Get(':id')

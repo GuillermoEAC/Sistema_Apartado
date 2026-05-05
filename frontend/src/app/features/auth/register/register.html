@@ -13,36 +13,43 @@
                 <p>Completa la siguiente información para crear tu cuenta.</p>
             </div>
 
-            <form class="formulario-register">
+            <form class="formulario-register" [formGroup]="form" (ngSubmit)="submit()">
                 <div class="campo">
                     <label for="nombre">Nombre completo</label>
-                    <input id="nombre" type="text" placeholder="Ingresa tu nombre completo" />
+                    <input id="nombre" type="text" formControlName="nombreCompleto"
+                        placeholder="Ingresa tu nombre completo" />
                 </div>
 
                 <div class="campo">
                     <label for="correo">Correo institucional</label>
-                    <input id="correo" type="email" placeholder="nombre@uas.edu.mx" />
+                    <input id="correo" type="email" formControlName="correo" placeholder="nombre@uas.edu.mx" />
                 </div>
 
                 <div class="campo">
                     <label for="facultad">Facultad o unidad académica</label>
-                    <input id="facultad" type="text" placeholder="Ej. Facultad de Ingenieria" />
+                    <input id="facultad" type="text" formControlName="facultad"
+                        placeholder="Ej. Facultad de Ingenieria" />
                 </div>
 
                 <div class="campo-grid">
                     <div class="campo">
                         <label for="contrasena">Contraseña</label>
-                        <input id="contrasena" type="password" placeholder="Ingresa tu contraseña" />
+                        <input id="contrasena" type="password" formControlName="password"
+                            placeholder="Ingresa tu contraseña" />
                     </div>
 
                     <div class="campo">
                         <label for="confirmar">Confirmar contraseña</label>
-                        <input id="confirmar" type="password" placeholder="Repite tu contraseña" />
+                        <input id="confirmar" type="password" formControlName="confirmar"
+                            placeholder="Repite tu contraseña" />
                     </div>
                 </div>
 
-                <button type="button" class="boton-principal">
-                    Crear cuenta
+                <p *ngIf="errorMessage" class="mensaje mensaje-error">{{ errorMessage }}</p>
+                <p *ngIf="successMessage" class="mensaje mensaje-exito">{{ successMessage }}</p>
+
+                <button type="submit" class="boton-principal" [disabled]="isSubmitting">
+                    {{ isSubmitting ? 'Creando cuenta...' : 'Crear cuenta' }}
                 </button>
             </form>
 
