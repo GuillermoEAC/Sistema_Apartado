@@ -1,11 +1,85 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { NgIf } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ReactiveFormsModule, NgIf],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
-export class RegisterComponent { }
+export class RegisterComponent {
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
+  errorMessage = '';
+  successMessage = '';
+  isSubmitting = false;
+
+  form = this.fb.group({
+    nombreCompleto: ['', [Validators.required, Validators.minLength(4)]],
+    correo: ['', [Validators.required, Validators.email]],
+    facultad: ['', [Validators.required, Validators.minLength(2)]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmar: ['', [Validators.required]],
+  });
+
+  submit() {
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.errorMessage = 'Completa todos los campos correctamente.';
+      return;
+    }
+
+    const { nombreCompleto, correo, password, confirmar } = this.form.getRawValue();
+    if (password !== confirmar) {
+      this.errorMessage = 'Las contraseñas no coinciden.';
+      return;
+    }
+
+    const nombrePartes = this.splitNombre(nombreCompleto ?? '');
+    this.isSubmitting = true;
+
+    this.authService
+      .register({
+        ...nombrePartes,
+        correo: correo ?? '',
+        password: password ?? '',
+      })
+      .subscribe({
+        next: () => {
+          this.successMessage = 'Cuenta creada correctamente.';
+          this.router.navigateByUrl('/app/dashboard');
+        },
+        error: (error) => {
+          this.isSubmitting = false;
+          this.errorMessage =
+            error?.error?.message ?? 'No se pudo crear la cuenta. Intenta de nuevo.';
+        },
+      });
+  }
+
+  private splitNombre(nombreCompleto: string) {
+    const partes = nombreCompleto.trim().replace(/\s+/g, ' ').split(' ');
+    if (partes.length === 1) {
+      return { nombre: partes[0], apellido1: 'Profesor' };
+    }
+
+    if (partes.length === 2) {
+      return { nombre: partes[0], apellido1: partes[1] };
+    }
+
+    return {
+      nombre: partes.slice(0, -2).join(' '),
+      apellido1: partes.at(-2) ?? 'Profesor',
+      apellido2: partes.at(-1),
+    };
+  }
+}

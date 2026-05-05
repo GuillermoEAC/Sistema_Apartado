@@ -9,11 +9,15 @@ import { CalendarioModule } from './modules/calendario/calendario.module';
 import { BloqueosModule } from './modules/bloqueos/bloqueos.module';
 import { HistorialModule } from './modules/historial/historial.module';
 import { NotificacionesModule } from './modules/notificaciones/notificaciones.module';
+import { CentrosModule } from './modules/centros/centros.module';
 
 @Module({
   imports: [
     // Config global desde .env
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env', '../.env'],
+    }),
 
     // TypeORM con MySQL
     TypeOrmModule.forRootAsync({
@@ -21,9 +25,9 @@ import { NotificacionesModule } from './modules/notificaciones/notificaciones.mo
       useFactory: (config: ConfigService) => ({
         type: 'mysql',
         host: config.get('DB_HOST', 'localhost'),
-        port: parseInt(config.get('DB_PORT', '3000')),
+        port: parseInt(config.get('DB_PORT', '3306')),
         username: config.get('DB_USERNAME', 'root'),
-        password: config.get('DB_PASSWORD', 'root'),
+        password: config.get('DB_PASSWORD', ''),
         database: config.get('DB_DATABASE', 'sis_computo'),
         entities: [__dirname + '/modules/**/entities/*.entity{.ts,.js}'],
         synchronize: false,   // ← usar schema.sql, no auto-sync en producción
@@ -42,6 +46,7 @@ import { NotificacionesModule } from './modules/notificaciones/notificaciones.mo
     BloqueosModule,
     HistorialModule,
     NotificacionesModule,
+    CentrosModule,
   ],
 })
 export class AppModule { }
