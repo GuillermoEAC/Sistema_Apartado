@@ -46,6 +46,9 @@ export class Solicitud {
     @Column({ type: 'text', nullable: true })
     software_requerido: string;
 
+    @Column({ length: 255, nullable: true })
+    requerimientos: string;
+
     @Column({ type: 'enum', enum: SolicitudEstado, default: SolicitudEstado.PENDIENTE })
     estado: SolicitudEstado;
 

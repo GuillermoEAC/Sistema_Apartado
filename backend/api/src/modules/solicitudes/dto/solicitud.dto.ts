@@ -43,6 +43,10 @@ export class CreateSolicitudDto {
     @IsOptional()
     @IsString()
     software_requerido?: string;
+
+    @IsOptional()
+    @IsString()
+    requerimientos?: string;
 }
 
 export class ReviewSolicitudDto {

@@ -66,4 +66,10 @@ export class SolicitudesController {
     cancel(@Param('id', ParseIntPipe) id: number, @Request() req) {
         return this.service.cancel(id, req.user);
     }
+
+    @Get(':id')
+    @ApiOperation({ summary: 'Detalle de una solicitud' })
+    getDetail(@Param('id', ParseIntPipe) id: number, @Request() req) {
+        return this.service.getDetail(id, req.user);
+    }
 }

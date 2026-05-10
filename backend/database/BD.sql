@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS usuario (
   apellido2       VARCHAR(30)   NULL,
   correo          VARCHAR(100)  NOT NULL UNIQUE,
   password_hash   VARCHAR(255)  NOT NULL,
+  telefono        VARCHAR(20)   NULL,
+  facultad        VARCHAR(100)  NULL,
   rol             ENUM('profesor', 'admin') NOT NULL DEFAULT 'profesor',
   activo          BOOLEAN       NOT NULL DEFAULT TRUE,
   created_at      DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -57,6 +59,7 @@ CREATE TABLE IF NOT EXISTS solicitud (
   num_alumnos       SMALLINT      NOT NULL,
   proposito         TEXT          NULL,
   software_requerido TEXT         NULL,
+  requerimientos    VARCHAR(255)  NULL,      -- Ej: 'internet,proyector,equipo_computo'
   estado            ENUM('pendiente', 'aprobada', 'rechazada', 'cancelada') NOT NULL DEFAULT 'pendiente',
   motivo_rechazo    TEXT          NULL,
   id_admin_revisor  INT           NULL,
@@ -173,3 +176,15 @@ CREATE INDEX idx_bloqueo_centro     ON bloqueo_horario(id_centro);
 CREATE INDEX idx_bloqueo_fechas     ON bloqueo_horario(fecha_inicio, fecha_fin);
 CREATE INDEX idx_notif_usuario      ON notificacion(id_usuario, leida);
 CREATE INDEX idx_historial_entidad  ON historial(entidad, id_entidad);
+
+
+-- Anexar a db
+UPDATE usuario 
+SET password_hash = '$2b$10$c/.qHLlny/yJL5obCsG91.UwGMHArRhq41COSoUBNXYXGzdZutMa6' 
+WHERE correo = 'admin@institucion.edu.mx';
+
+ALTER TABLE usuario ADD COLUMN telefono VARCHAR(20) NULL AFTER password_hash;
+ALTER TABLE usuario ADD COLUMN facultad VARCHAR(100) NULL AFTER telefono;
+
+-- Agregar requerimientos a solicitud
+ALTER TABLE solicitud ADD COLUMN requerimientos VARCHAR(255) NULL AFTER software_requerido;

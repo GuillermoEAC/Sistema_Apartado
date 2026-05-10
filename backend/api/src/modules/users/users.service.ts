@@ -42,6 +42,8 @@ export class UsersService {
         apellido2?: string;
         correo: string;
         password: string;
+        telefono?: string;
+        facultad?: string;
         rol?: UserRole;
     }) {
         const existing = await this.findByEmail(data.correo);

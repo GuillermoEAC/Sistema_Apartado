@@ -30,6 +30,12 @@ export class User {
     @Column({ length: 255, name: 'password_hash' })
     password_hash: string;
 
+    @Column({ length: 20, nullable: true })
+    telefono: string;
+
+    @Column({ length: 100, nullable: true })
+    facultad: string;
+
     @Column({ type: 'enum', enum: UserRole, default: UserRole.PROFESOR })
     rol: UserRole;
 
