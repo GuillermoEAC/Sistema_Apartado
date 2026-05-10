@@ -4,6 +4,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Solicitud } from '../../solicitudes/entities/solicitud.entity';
+import { CentroComputo } from '../../centros/entities/centro-computo.entity';
 
 export enum ReservaEstado {
     ACTIVA = 'activa',
@@ -50,6 +51,10 @@ export class Reserva {
     @ManyToOne(() => User, { eager: true })
     @JoinColumn({ name: 'id_usuario' })
     usuario: User;
+
+    @ManyToOne(() => CentroComputo, { eager: true })
+    @JoinColumn({ name: 'id_centro' })
+    centro: CentroComputo;
 
     @ManyToOne(() => Solicitud)
     @JoinColumn({ name: 'id_solicitud' })

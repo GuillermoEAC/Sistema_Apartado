@@ -55,6 +55,8 @@ export class ReservasService {
 
     findAllForUser(id_usuario: number, page = 1, limit = 20, estado?: string) {
         const qb = this.repo.createQueryBuilder('r')
+            .leftJoinAndSelect('r.solicitud', 's')
+            .leftJoinAndSelect('r.centro', 'c')
             .where('r.id_usuario = :id_usuario', { id_usuario })
             .orderBy('r.fecha_uso', 'DESC');
 
@@ -73,6 +75,8 @@ export class ReservasService {
     findAll(page = 1, limit = 20, estado?: string, buscar?: string) {
         const qb = this.repo.createQueryBuilder('r')
             .leftJoinAndSelect('r.usuario', 'u')
+            .leftJoinAndSelect('r.solicitud', 's')
+            .leftJoinAndSelect('r.centro', 'c')
             .orderBy('r.fecha_uso', 'DESC');
 
         if (estado) qb.andWhere('r.estado = :estado', { estado });
@@ -176,7 +180,10 @@ export class ReservasService {
     }
 
     async findOne(id: number): Promise<Reserva> {
-        const r = await this.repo.findOne({ where: { id_reserva: id } });
+        const r = await this.repo.findOne({ 
+            where: { id_reserva: id },
+            relations: ['solicitud', 'usuario', 'centro'] 
+        });
         if (!r) throw new NotFoundException(`Reserva #${id} no encontrada`);
         return r;
     }

@@ -3,6 +3,7 @@ import {
     ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { CentroComputo } from '../../centros/entities/centro-computo.entity';
 
 export enum SolicitudEstado {
     PENDIENTE = 'pendiente',
@@ -64,6 +65,10 @@ export class Solicitud {
     @ManyToOne(() => User, { eager: true })
     @JoinColumn({ name: 'id_usuario' })
     usuario: User;
+
+    @ManyToOne(() => CentroComputo, { eager: true })
+    @JoinColumn({ name: 'id_centro' })
+    centro: CentroComputo;
 
     @CreateDateColumn()
     created_at: Date;

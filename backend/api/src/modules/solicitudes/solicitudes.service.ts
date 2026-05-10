@@ -258,6 +258,7 @@ export class SolicitudesService {
     // ================================================================
     findAllForUser(id_usuario: number, page = 1, limit = 20, estado?: string) {
         const qb = this.solicitudRepo.createQueryBuilder('s')
+            .leftJoinAndSelect('s.centro', 'c')
             .where('s.id_usuario = :id_usuario', { id_usuario })
             .orderBy('s.created_at', 'DESC');
 
@@ -276,6 +277,7 @@ export class SolicitudesService {
     findAll(page = 1, limit = 20, estado?: string, buscar?: string) {
         const qb = this.solicitudRepo.createQueryBuilder('s')
             .leftJoinAndSelect('s.usuario', 'u')
+            .leftJoinAndSelect('s.centro', 'c')
             .orderBy('s.created_at', 'DESC');
 
         if (estado) qb.andWhere('s.estado = :estado', { estado });
@@ -308,7 +310,7 @@ export class SolicitudesService {
     private async findOneWithRelations(id: number): Promise<Solicitud> {
         const s = await this.solicitudRepo.findOne({
             where: { id_solicitud: id },
-            relations: ['usuario'],
+            relations: ['usuario', 'centro'],
         });
         if (!s) throw new NotFoundException(`Solicitud #${id} no encontrada`);
         return s;
