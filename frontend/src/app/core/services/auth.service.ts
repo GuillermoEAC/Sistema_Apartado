@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 
 interface AuthResponse {
   access_token: string;
@@ -20,15 +20,34 @@ interface RegisterPayload {
   password: string;
 }
 
+interface LoginPayload {
+  correo: string;
+  password: string;
+}
+
+interface ApiResponse<T> {
+  statusCode: number;
+  message: string;
+  data: T;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly apiUrl = 'http://localhost:3000/api/v1/auth';
 
   constructor(private readonly http: HttpClient) {}
 
+  login(payload: LoginPayload) {
+    return this.http
+      .post<ApiResponse<AuthResponse>>(`${this.apiUrl}/login`, payload)
+      .pipe(map((response) => response.data))
+      .pipe(tap((response) => this.saveSession(response)));
+  }
+
   register(payload: RegisterPayload) {
     return this.http
-      .post<AuthResponse>(`${this.apiUrl}/register`, payload)
+      .post<ApiResponse<AuthResponse>>(`${this.apiUrl}/register`, payload)
+      .pipe(map((response) => response.data))
       .pipe(tap((response) => this.saveSession(response)));
   }
 

@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS notificacion (
 -- Admin por defecto
 INSERT INTO usuario (nombre, apellido1, correo, password_hash, rol) VALUES
 ('Admin', 'Sistema', 'admin@institucion.edu.mx',
- '$2b$10$PLACEHOLDER_BCRYPT_HASH', -- Cambiar por hash real en seeding
+ '$2b$10$5gVemyqK1HmCe84zXc8qJun6BOzHGkrU7ilaPhwLWVQVgi5Py724q', -- contraseña: admin123
  'admin');
 
 -- Sala de cómputo por defecto
