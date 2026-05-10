@@ -8,8 +8,22 @@ import * as bcrypt from 'bcryptjs';
 export class UsersService {
     constructor(@InjectRepository(User) private repo: Repository<User>) { }
 
-    findAll() {
-        return this.repo.find({ order: { created_at: 'DESC' } });
+    findAll(page = 1, limit = 20, buscar?: string) {
+        const qb = this.repo.createQueryBuilder('u')
+            .orderBy('u.created_at', 'DESC');
+
+        if (buscar) {
+            qb.andWhere('(u.nombre LIKE :b OR u.apellido1 LIKE :b OR u.correo LIKE :b)', { b: `%${buscar}%` });
+        }
+
+        return qb
+            .skip((page - 1) * limit)
+            .take(limit)
+            .getManyAndCount()
+            .then(([data, total]) => ({
+                data, total, page, limit,
+                totalPages: Math.ceil(total / limit),
+            }));
     }
 
     async findById(id: number): Promise<User> {

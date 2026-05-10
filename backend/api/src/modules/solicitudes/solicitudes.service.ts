@@ -120,12 +120,41 @@ export class SolicitudesService {
         return this.findOne(id);
     }
 
-    findAllForUser(id_usuario: number) {
-        return this.solicitudRepo.find({ where: { id_usuario }, order: { created_at: 'DESC' } });
+    findAllForUser(id_usuario: number, page = 1, limit = 20, estado?: string) {
+        const qb = this.solicitudRepo.createQueryBuilder('s')
+            .where('s.id_usuario = :id_usuario', { id_usuario })
+            .orderBy('s.created_at', 'DESC');
+
+        if (estado) qb.andWhere('s.estado = :estado', { estado });
+
+        return qb
+            .skip((page - 1) * limit)
+            .take(limit)
+            .getManyAndCount()
+            .then(([data, total]) => ({
+                data, total, page, limit,
+                totalPages: Math.ceil(total / limit),
+            }));
     }
 
-    findAll() {
-        return this.solicitudRepo.find({ order: { created_at: 'DESC' } });
+    findAll(page = 1, limit = 20, estado?: string, buscar?: string) {
+        const qb = this.solicitudRepo.createQueryBuilder('s')
+            .leftJoinAndSelect('s.usuario', 'u')
+            .orderBy('s.created_at', 'DESC');
+
+        if (estado) qb.andWhere('s.estado = :estado', { estado });
+        if (buscar) {
+            qb.andWhere('(u.nombre LIKE :b OR u.apellido1 LIKE :b OR s.materia LIKE :b OR s.grupo LIKE :b)', { b: `%${buscar}%` });
+        }
+
+        return qb
+            .skip((page - 1) * limit)
+            .take(limit)
+            .getManyAndCount()
+            .then(([data, total]) => ({
+                data, total, page, limit,
+                totalPages: Math.ceil(total / limit),
+            }));
     }
 
     private async findOne(id: number): Promise<Solicitud> {

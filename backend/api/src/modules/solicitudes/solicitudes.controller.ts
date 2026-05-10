@@ -1,6 +1,6 @@
 import {
     Controller, Get, Post, Patch, Param,
-    Body, UseGuards, Request, ParseIntPipe,
+    Body, UseGuards, Request, ParseIntPipe, Query,
 } from '@nestjs/common';
 import { SolicitudesService } from './solicitudes.service';
 import { CreateSolicitudDto, ReviewSolicitudDto } from './dto/solicitud.dto';
@@ -8,6 +8,7 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @ApiTags('Solicitudes')
 @ApiBearerAuth()
@@ -26,15 +27,15 @@ export class SolicitudesController {
     @Get('mis-solicitudes')
     @Roles('profesor')
     @ApiOperation({ summary: 'Ver mis solicitudes (Profesor)' })
-    findMine(@Request() req) {
-        return this.service.findAllForUser(req.user.id_usuario);
+    findMine(@Request() req, @Query() query: PaginationDto, @Query('estado') estado?: string) {
+        return this.service.findAllForUser(req.user.id_usuario, query.page, query.limit, estado);
     }
 
     @Get()
     @Roles('admin')
     @ApiOperation({ summary: 'Ver todas las solicitudes (Admin)' })
-    findAll() {
-        return this.service.findAll();
+    findAll(@Query() query: PaginationDto, @Query('estado') estado?: string) {
+        return this.service.findAll(query.page, query.limit, estado, query.buscar);
     }
 
     @Post(':id/aprobar')

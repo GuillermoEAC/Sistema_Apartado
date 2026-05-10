@@ -53,12 +53,41 @@ export class ReservasService {
         private notifSvc: NotificacionesService,
     ) { }
 
-    findAllForUser(id_usuario: number) {
-        return this.repo.find({ where: { id_usuario }, order: { fecha_uso: 'DESC' } });
+    findAllForUser(id_usuario: number, page = 1, limit = 20, estado?: string) {
+        const qb = this.repo.createQueryBuilder('r')
+            .where('r.id_usuario = :id_usuario', { id_usuario })
+            .orderBy('r.fecha_uso', 'DESC');
+
+        if (estado) qb.andWhere('r.estado = :estado', { estado });
+
+        return qb
+            .skip((page - 1) * limit)
+            .take(limit)
+            .getManyAndCount()
+            .then(([data, total]) => ({
+                data, total, page, limit,
+                totalPages: Math.ceil(total / limit),
+            }));
     }
 
-    findAll() {
-        return this.repo.find({ order: { fecha_uso: 'DESC' } });
+    findAll(page = 1, limit = 20, estado?: string, buscar?: string) {
+        const qb = this.repo.createQueryBuilder('r')
+            .leftJoinAndSelect('r.usuario', 'u')
+            .orderBy('r.fecha_uso', 'DESC');
+
+        if (estado) qb.andWhere('r.estado = :estado', { estado });
+        if (buscar) {
+            qb.andWhere('(u.nombre LIKE :b OR u.apellido1 LIKE :b)', { b: `%${buscar}%` });
+        }
+
+        return qb
+            .skip((page - 1) * limit)
+            .take(limit)
+            .getManyAndCount()
+            .then(([data, total]) => ({
+                data, total, page, limit,
+                totalPages: Math.ceil(total / limit),
+            }));
     }
 
     async checkDisponibilidad(dto: CheckDisponibilidadDto) {

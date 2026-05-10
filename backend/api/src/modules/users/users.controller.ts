@@ -1,5 +1,5 @@
 import {
-    Controller, Get, Post, Patch, Param, Body,
+    Controller, Get, Post, Patch, Param, Body, Query,
     UseGuards, ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -8,6 +8,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { IsEmail, IsString, MinLength, IsOptional } from 'class-validator';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 
 class CreateUserDto {
     @IsString() nombre: string;
@@ -28,8 +29,8 @@ export class UsersController {
     @Get()
     @Roles('admin')
     @ApiOperation({ summary: 'Listar todos los usuarios (Admin)' })
-    findAll() {
-        return this.service.findAll();
+    findAll(@Query() query: PaginationDto) {
+        return this.service.findAll(query.page, query.limit, query.buscar);
     }
 
     @Get(':id')

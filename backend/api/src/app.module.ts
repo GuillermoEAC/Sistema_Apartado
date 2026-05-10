@@ -10,6 +10,7 @@ import { BloqueosModule } from './modules/bloqueos/bloqueos.module';
 import { HistorialModule } from './modules/historial/historial.module';
 import { NotificacionesModule } from './modules/notificaciones/notificaciones.module';
 import { CentrosModule } from './modules/centros/centros.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { CentrosModule } from './modules/centros/centros.module';
         password: config.get('DB_PASSWORD', ''),
         database: config.get('DB_DATABASE', 'sis_computo'),
         entities: [__dirname + '/modules/**/entities/*.entity{.ts,.js}'],
-        synchronize: false,   // ← usar schema.sql, no auto-sync en producción
+        synchronize: false,
         logging: process.env.NODE_ENV === 'development',
         charset: 'utf8mb4',
       }),
@@ -47,6 +48,7 @@ import { CentrosModule } from './modules/centros/centros.module';
     HistorialModule,
     NotificacionesModule,
     CentrosModule,
+    DashboardModule,
   ],
 })
 export class AppModule { }

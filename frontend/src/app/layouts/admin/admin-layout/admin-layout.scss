@@ -9,6 +9,11 @@
     background: #111827;
     color: white;
     padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: sticky;
+    top: 0;
 }
 
 .logo h2 {
@@ -24,6 +29,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    flex: 1;
 }
 
 .menu a {
@@ -31,10 +37,66 @@
     text-decoration: none;
     padding: 10px 12px;
     border-radius: 8px;
+    transition: background 0.2s ease;
 }
 
 .menu a:hover {
     background: rgba(255, 255, 255, 0.08);
+}
+
+.menu a.active {
+    background: rgba(37, 99, 235, 0.5);
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-user {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.admin-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-email {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-logout {
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.12);
+    color: #fca5a5;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.btn-logout:hover {
+    background: rgba(239, 68, 68, 0.25);
+    color: #fff;
 }
 
 .panel-principal {

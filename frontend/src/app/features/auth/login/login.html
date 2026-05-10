@@ -13,19 +13,27 @@
                 <p>Ingresa con tu correo institucional y contraseña.</p>
             </div>
 
-            <form class="formulario-login">
+            <form class="formulario-login" [formGroup]="form" (ngSubmit)="submit()">
                 <div class="campo">
                     <label for="correo">Correo institucional</label>
-                    <input id="correo" type="email" placeholder="nombre@uas.edu.mx" />
+                    <input id="correo" type="email" formControlName="correo"
+                        placeholder="nombre@uas.edu.mx" />
+                    <span *ngIf="form.get('correo')?.touched && form.get('correo')?.hasError('email')"
+                        class="campo-error">Ingresa un correo válido</span>
                 </div>
 
                 <div class="campo">
                     <label for="contrasena">Contraseña</label>
-                    <input id="contrasena" type="password" placeholder="Ingresa tu contraseña" />
+                    <input id="contrasena" type="password" formControlName="password"
+                        placeholder="Ingresa tu contraseña" />
+                    <span *ngIf="form.get('password')?.touched && form.get('password')?.hasError('minlength')"
+                        class="campo-error">Mínimo 6 caracteres</span>
                 </div>
 
-                <button type="button" class="boton-principal">
-                    Iniciar sesión
+                <p *ngIf="errorMessage" class="mensaje mensaje-error">{{ errorMessage }}</p>
+
+                <button type="submit" class="boton-principal" [disabled]="isSubmitting">
+                    {{ isSubmitting ? 'Iniciando sesión...' : 'Iniciar sesión' }}
                 </button>
             </form>
 

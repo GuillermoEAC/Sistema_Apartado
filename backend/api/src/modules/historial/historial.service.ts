@@ -18,11 +18,33 @@ export class HistorialService {
         return this.repo.save(h);
     }
 
-    findByUser(id_usuario: number) {
-        return this.repo.find({ where: { id_usuario }, order: { created_at: 'DESC' } });
+    findByUser(id_usuario: number, page = 1, limit = 20) {
+        return this.repo.createQueryBuilder('h')
+            .where('h.id_usuario = :id_usuario', { id_usuario })
+            .orderBy('h.created_at', 'DESC')
+            .skip((page - 1) * limit)
+            .take(limit)
+            .getManyAndCount()
+            .then(([data, total]) => ({
+                data, total, page, limit,
+                totalPages: Math.ceil(total / limit),
+            }));
     }
 
-    findAll() {
-        return this.repo.find({ order: { created_at: 'DESC' } });
+    findAll(page = 1, limit = 20, entidad?: string, buscar?: string) {
+        const qb = this.repo.createQueryBuilder('h')
+            .orderBy('h.created_at', 'DESC');
+
+        if (entidad) qb.andWhere('h.entidad = :entidad', { entidad });
+        if (buscar) qb.andWhere('(h.accion LIKE :b OR h.detalle LIKE :b)', { b: `%${buscar}%` });
+
+        return qb
+            .skip((page - 1) * limit)
+            .take(limit)
+            .getManyAndCount()
+            .then(([data, total]) => ({
+                data, total, page, limit,
+                totalPages: Math.ceil(total / limit),
+            }));
     }
 }

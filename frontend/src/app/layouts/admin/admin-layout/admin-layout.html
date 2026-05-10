@@ -6,13 +6,23 @@
         </div>
 
         <nav class="menu">
-            <a routerLink="/admin/dashboard">Dashboard</a>
-            <a routerLink="/admin/requests">Solicitudes</a>
-            <a routerLink="/admin/calendar">Calendario</a>
-            <a routerLink="/admin/users">Usuarios</a>
-            <a routerLink="/admin/blocks">Bloqueos</a>
-            <a routerLink="/admin/history">Historial</a>
+            <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+            <a routerLink="/admin/requests" routerLinkActive="active">Solicitudes</a>
+            <a routerLink="/admin/calendar" routerLinkActive="active">Calendario</a>
+            <a routerLink="/admin/users" routerLinkActive="active">Usuarios</a>
+            <a routerLink="/admin/blocks" routerLinkActive="active">Bloqueos</a>
+            <a routerLink="/admin/history" routerLinkActive="active">Historial</a>
         </nav>
+
+        <div class="sidebar-footer">
+            <div class="admin-user">
+                <span class="admin-name">{{ user()?.nombre ?? 'Admin' }}</span>
+                <span class="admin-email">{{ user()?.correo ?? '' }}</span>
+            </div>
+            <button class="btn-logout" (click)="logout()" title="Cerrar sesión">
+                Salir
+            </button>
+        </div>
     </aside>
 
     <section class="panel-principal">

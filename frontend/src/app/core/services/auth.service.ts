@@ -1,18 +1,33 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { tap } from 'rxjs';
+import { Injectable, signal, computed } from '@angular/core';
+import { Router } from '@angular/router';
+import { tap, map, catchError, throwError } from 'rxjs';
 
-interface AuthResponse {
-  access_token: string;
-  user: {
-    id: number;
-    nombre: string;
-    correo: string;
-    rol: 'profesor' | 'admin';
-  };
+export interface AuthUser {
+  id: number;
+  nombre: string;
+  correo: string;
+  rol: 'profesor' | 'admin';
 }
 
-interface RegisterPayload {
+export interface AuthResponse {
+  access_token: string;
+  user: AuthUser;
+}
+
+/** Backend wraps all OK responses in { statusCode, message, data } */
+interface ApiWrapper<T> {
+  statusCode: number;
+  message: string;
+  data: T;
+}
+
+export interface LoginPayload {
+  correo: string;
+  password: string;
+}
+
+export interface RegisterPayload {
   nombre: string;
   apellido1: string;
   apellido2?: string;
@@ -24,16 +39,86 @@ interface RegisterPayload {
 export class AuthService {
   private readonly apiUrl = 'http://localhost:3000/api/v1/auth';
 
-  constructor(private readonly http: HttpClient) {}
+  // Reactive signals for auth state
+  private readonly _user = signal<AuthUser | null>(this.loadUserFromStorage());
+  private readonly _token = signal<string | null>(this.loadTokenFromStorage());
 
-  register(payload: RegisterPayload) {
+  /** Current authenticated user (readonly signal) */
+  readonly user = this._user.asReadonly();
+
+  /** Whether a user is currently logged in */
+  readonly isLoggedIn = computed(() => !!this._token() && !!this._user());
+
+  /** Current user role */
+  readonly userRole = computed(() => this._user()?.rol ?? null);
+
+  constructor(
+    private readonly http: HttpClient,
+    private readonly router: Router,
+  ) { }
+
+  // Login
+  login(payload: LoginPayload) {
     return this.http
-      .post<AuthResponse>(`${this.apiUrl}/register`, payload)
-      .pipe(tap((response) => this.saveSession(response)));
+      .post<ApiWrapper<AuthResponse>>(`${this.apiUrl}/login`, payload)
+      .pipe(
+        map((res) => res.data),
+        tap((response) => this.saveSession(response)),
+        catchError((err) => throwError(() => err)),
+      );
   }
 
+  // Register
+  register(payload: RegisterPayload) {
+    return this.http
+      .post<ApiWrapper<AuthResponse>>(`${this.apiUrl}/register`, payload)
+      .pipe(
+        map((res) => res.data),
+        tap((response) => this.saveSession(response)),
+        catchError((err) => throwError(() => err)),
+      );
+  }
+
+  // Logout
+  logout() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user');
+    this._user.set(null);
+    this._token.set(null);
+    this.router.navigateByUrl('/login');
+  }
+
+  // Token getter (for interceptors)
+  getToken(): string | null {
+    return this._token();
+  }
+
+  // Session helpers
   private saveSession(response: AuthResponse) {
-    localStorage.setItem('access_token', response.access_token);
-    localStorage.setItem('user', JSON.stringify(response.user));
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      localStorage.setItem('access_token', response.access_token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+    }
+    this._token.set(response.access_token);
+    this._user.set(response.user);
+  }
+
+  private loadUserFromStorage(): AuthUser | null {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return null;
+    }
+    try {
+      const raw = localStorage.getItem('user');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  private loadTokenFromStorage(): string | null {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return null;
+    }
+    return localStorage.getItem('access_token') ?? null;
   }
 }

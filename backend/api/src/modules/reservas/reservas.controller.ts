@@ -8,6 +8,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 
 class CancelDto {
     @IsOptional() @IsString() motivo?: string;
@@ -22,15 +23,15 @@ export class ReservasController {
 
     @Get('mis-reservas')
     @ApiOperation({ summary: 'Mis reservas (Profesor)' })
-    findMine(@Request() req) {
-        return this.service.findAllForUser(req.user.id_usuario);
+    findMine(@Request() req, @Query() query: PaginationDto, @Query('estado') estado?: string) {
+        return this.service.findAllForUser(req.user.id_usuario, query.page, query.limit, estado);
     }
 
     @Get()
     @Roles('admin')
     @ApiOperation({ summary: 'Todas las reservas (Admin)' })
-    findAll() {
-        return this.service.findAll();
+    findAll(@Query() query: PaginationDto, @Query('estado') estado?: string) {
+        return this.service.findAll(query.page, query.limit, estado, query.buscar);
     }
 
     @Get('disponibilidad')

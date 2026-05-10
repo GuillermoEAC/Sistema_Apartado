@@ -3,6 +3,8 @@ import { Routes } from '@angular/router';
 import { PublicLayout } from './layouts/public/public-layout/public-layout';
 import { TeacherLayout } from './layouts/teacher/teacher-layout/teacher-layout';
 import { AdminLayout } from './layouts/admin/admin-layout/admin-layout';
+import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
     {
@@ -32,6 +34,7 @@ export const routes: Routes = [
     {
         path: 'app',
         component: TeacherLayout,
+        canActivate: [authGuard],
         children: [
             {
                 path: 'dashboard',
@@ -79,6 +82,7 @@ export const routes: Routes = [
     {
         path: 'admin',
         component: AdminLayout,
+        canActivate: [roleGuard('admin')],
         children: [
             {
                 path: 'dashboard',
