@@ -1,0 +1,284 @@
+:host {
+    display: block;
+    padding: 24px;
+    background-color: #f3f4f6;
+    min-height: 100vh;
+    font-family: Inter, sans-serif;
+    color: #111827;
+}
+
+/* HEADER */
+h2 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+p {
+    margin: 0;
+}
+
+.text-gray-900 {
+    color: #111827;
+}
+
+.text-gray-600 {
+    color: #6b7280;
+}
+
+.text-sm {
+    font-size: 14px;
+}
+
+.text-xs {
+    font-size: 12px;
+}
+
+.font-semibold {
+    font-weight: 700;
+}
+
+.font-medium {
+    font-weight: 600;
+}
+
+/* ESPACIADOS */
+.mb-6 {
+    margin-bottom: 24px;
+}
+
+.mt-1 {
+    margin-top: 4px;
+}
+
+.mt-6 {
+    margin-top: 24px;
+}
+
+.p-12 {
+    padding: 48px;
+}
+
+/* FLEX */
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.gap-2 {
+    gap: 8px;
+}
+
+/* BOTON AGREGAR */
+.bg-blue-600 {
+    background-color: #2563eb;
+}
+
+.bg-blue-600:hover {
+    background-color: #1d4ed8;
+}
+
+.text-white {
+    color: white;
+}
+
+.rounded-lg {
+    border-radius: 14px;
+}
+
+.px-4 {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.py-2\.5 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.transition-colors {
+    transition: background-color 0.2s ease;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* SEARCH */
+.relative {
+    position: relative;
+}
+
+input {
+    width: 100%;
+    padding: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 14px;
+    font-size: 16px;
+    outline: none;
+    background-color: white;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* TABLA */
+.bg-white {
+    background-color: white;
+}
+
+.border {
+    border: 1px solid #d1d5db;
+}
+
+.border-gray-200 {
+    border-color: #d1d5db;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.overflow-x-auto {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* HEADER TABLA */
+thead {
+    background-color: #f9fafb;
+}
+
+thead th {
+    text-align: left;
+    padding: 18px 24px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* FILAS */
+tbody td {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+}
+
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+/* STATUS */
+.inline-flex {
+    display: inline-flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.rounded-full {
+    border-radius: 9999px;
+}
+
+.px-3 {
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.py-1 {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.bg-green-100 {
+    background-color: #dcfce7;
+}
+
+.text-green-700 {
+    color: #15803d;
+}
+
+.hover\:bg-green-200:hover {
+    background-color: #bbf7d0;
+}
+
+.bg-red-100 {
+    background-color: #fee2e2;
+}
+
+.text-red-700 {
+    color: #b91c1c;
+}
+
+.hover\:bg-red-200:hover {
+    background-color: #fecaca;
+}
+
+/* BOTONES ACCIONES */
+.p-2 {
+    padding: 10px;
+}
+
+.text-blue-700 {
+    color: #2563eb;
+}
+
+.hover\:bg-blue-50:hover {
+    background-color: #eff6ff;
+}
+
+.hover\:bg-red-50:hover {
+    background-color: #fef2f2;
+}
+
+/* NO USERS */
+.text-center {
+    text-align: center;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    :host {
+        padding: 16px;
+    }
+
+    table {
+        min-width: 900px;
+    }
+
+    h2 {
+        font-size: 26px;
+    }
+
+    input {
+        font-size: 15px;
+    }
+}

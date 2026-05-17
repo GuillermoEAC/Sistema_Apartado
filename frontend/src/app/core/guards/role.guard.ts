@@ -18,7 +18,6 @@ export function roleGuard(requiredRole: 'profesor' | 'admin'): CanActivateFn {
       router.navigateByUrl(redirectPath);
       return false;
     }
-
     return true;
   };
 }

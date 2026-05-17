@@ -1,1 +1,129 @@
-<p>calendar works!</p>
+<div>
+    <div class="mb-6">
+        <h2 class="text-xl font-semibold text-gray-900">
+            Calendario Global de Reservas
+        </h2>
+
+        <p class="text-gray-600 mt-1">
+            Vista completa de todas las reservas de la sala
+        </p>
+    </div>
+
+    <!-- Legend -->
+    <div class="bg-white rounded-lg border border-gray-200 p-4 mb-6">
+        <div class="flex items-center gap-6 flex-wrap">
+            <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-green-100 border-2 border-green-300 rounded"></div>
+
+                <span class="text-sm text-gray-700 font-medium">
+                    Reservado
+                </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-yellow-100 border-2 border-yellow-300 rounded"></div>
+
+                <span class="text-sm text-gray-700 font-medium">
+                    Pendiente
+                </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-red-100 border-2 border-red-300 rounded"></div>
+
+                <span class="text-sm text-gray-700 font-medium">
+                    Bloqueado
+                </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-white border-2 border-gray-200 rounded"></div>
+
+                <span class="text-sm text-gray-700 font-medium">
+                    Disponible
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6 overflow-x-auto">
+        <div class="inline-block min-w-full">
+            <div class="grid grid-cols-[100px_repeat(5,1fr)] gap-3">
+                <!-- Header -->
+                <div class="font-medium text-sm text-gray-500 flex items-end pb-2">
+                    Horario
+                </div>
+
+                <div *ngFor="let day of days" class="text-center pb-2">
+                    <div class="font-semibold text-gray-900">
+                        {{ day }}
+                    </div>
+
+                    <div class="text-xs text-gray-500 mt-1">
+                        {{ getDayDate(day) }}
+                    </div>
+                </div>
+
+                <!-- Time slots -->
+                <ng-container *ngFor="let hour of hours">
+                    <div class="font-medium text-sm text-gray-700 flex items-start pt-2">
+                        {{ hour }}
+                    </div>
+
+                    <ng-container *ngFor="let day of days">
+                        <div class="border-2 rounded-lg p-3 min-h-[80px] cursor-pointer hover:shadow-md transition-all"
+                            [ngClass]="
+                getReservation(day, hour)
+                  ? getStatusColor(getReservation(day, hour)?.status || '')
+                  : 'bg-white border-gray-200'
+              ">
+                            <div *ngIf="getReservation(day, hour) as reservation" class="h-full flex flex-col">
+                                <p class="text-xs font-semibold truncate mb-1">
+                                    {{ reservation.group }}
+                                </p>
+
+                                <p class="text-xs opacity-80 truncate">
+                                    {{ reservation.professor }}
+                                </p>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+            <p class="text-2xl font-bold text-green-900">
+                {{ getReservedCount() }}
+            </p>
+
+            <p class="text-sm text-green-700 mt-1">
+                Reservas Confirmadas
+            </p>
+        </div>
+
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <p class="text-2xl font-bold text-yellow-900">
+                {{ getPendingCount() }}
+            </p>
+
+            <p class="text-sm text-yellow-700 mt-1">
+                Pendientes de Aprobar
+            </p>
+        </div>
+
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+            <p class="text-2xl font-bold text-red-900">
+                {{ getBlockedCount() }}
+            </p>
+
+            <p class="text-sm text-red-700 mt-1">
+                Horarios Bloqueados
+            </p>
+        </div>
+    </div>
+</div>

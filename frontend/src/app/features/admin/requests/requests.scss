@@ -1,0 +1,281 @@
+/* CONTENEDOR GENERAL */
+:host {
+    display: block;
+    padding: 24px;
+    background-color: #f3f4f6;
+    min-height: 100vh;
+    font-family: Inter, sans-serif;
+}
+
+/* HEADER */
+h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
+/* SUBTITULO */
+.text-gray-600 {
+    color: #6b7280;
+}
+
+/* CARD PRINCIPAL */
+.bg-white {
+    background-color: #ffffff;
+}
+
+.rounded-lg {
+    border-radius: 14px;
+}
+
+.border {
+    border: 1px solid #e5e7eb;
+}
+
+/* TABLA */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* HEADER TABLA */
+thead {
+    background-color: #f9fafb;
+}
+
+thead th {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+    padding: 18px 24px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* FILAS */
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+tbody td {
+    padding: 18px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+}
+
+/* NOMBRE PROFESOR */
+.font-medium {
+    font-weight: 600;
+}
+
+.text-gray-900 {
+    color: #111827;
+}
+
+.text-sm {
+    font-size: 14px;
+}
+
+.text-xs {
+    font-size: 12px;
+}
+
+/* FECHA Y HORARIO */
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.gap-1 {
+    gap: 4px;
+}
+
+/* BOTONES */
+button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+/* CONTENEDOR BOTONES */
+.items-center {
+    display: flex;
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.gap-2 {
+    gap: 8px;
+}
+
+/* BOTON VER */
+.text-blue-700 {
+    color: #2563eb;
+}
+
+.text-blue-700:hover {
+    background-color: #eff6ff;
+}
+
+/* BOTON APROBAR */
+.text-green-700 {
+    color: #15803d;
+}
+
+.text-green-700:hover {
+    background-color: #f0fdf4;
+}
+
+/* BOTON RECHAZAR */
+.text-red-700 {
+    color: #dc2626;
+}
+
+.text-red-700:hover {
+    background-color: #fef2f2;
+}
+
+/* ESTILO ICON BUTTON */
+.p-2 {
+    padding: 10px;
+}
+
+.rounded-lg {
+    border-radius: 10px;
+}
+
+/* MODAL */
+.fixed {
+    position: fixed;
+}
+
+.inset-0 {
+    inset: 0;
+}
+
+.bg-black {
+    background-color: rgba(0, 0, 0, 0.45);
+}
+
+.z-50 {
+    z-index: 50;
+}
+
+.max-w-2xl {
+    max-width: 700px;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.max-h-\[90vh\] {
+    max-height: 90vh;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
+/* MODAL CARD */
+.rounded-xl {
+    border-radius: 18px;
+}
+
+/* ESPACIADOS */
+.mb-6 {
+    margin-bottom: 24px;
+}
+
+.mt-1 {
+    margin-top: 4px;
+}
+
+.p-6 {
+    padding: 24px;
+}
+
+.p-12 {
+    padding: 48px;
+}
+
+/* MODAL FOOTER */
+.border-t {
+    border-top: 1px solid #e5e7eb;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+/* BOTONES MODAL */
+.bg-red-600 {
+    background-color: #dc2626;
+}
+
+.bg-red-600:hover {
+    background-color: #b91c1c;
+}
+
+.bg-green-600 {
+    background-color: #16a34a;
+}
+
+.bg-green-600:hover {
+    background-color: #15803d;
+}
+
+.text-white {
+    color: white;
+}
+
+.border-gray-300 {
+    border: 1px solid #d1d5db;
+}
+
+.hover\:bg-gray-50:hover {
+    background-color: #f9fafb;
+}
+
+/* UTILIDADES */
+.transition-colors {
+    transition: background-color 0.2s ease;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.overflow-x-auto {
+    overflow-x: auto;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    table {
+        min-width: 900px;
+    }
+
+    .p-6 {
+        padding: 16px;
+    }
+
+    tbody td,
+    thead th {
+        padding: 14px;
+    }
+}

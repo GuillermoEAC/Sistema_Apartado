@@ -1,1 +1,221 @@
-<p>requests works!</p>
+<div>
+    <div class="mb-6">
+        <h2 class="text-xl font-semibold text-gray-900">
+            Solicitudes Pendientes
+        </h2>
+
+        <p class="text-gray-600 mt-1">
+            {{ requests.length }} solicitud(es) esperando aprobación
+        </p>
+    </div>
+
+    <div *ngIf="requests.length === 0" class="bg-white rounded-lg border border-gray-200 p-12 text-center">
+        <h3 class="text-lg font-medium text-gray-900 mb-2">
+            No hay solicitudes pendientes
+        </h3>
+
+        <p class="text-gray-600">
+            Todas las solicitudes han sido procesadas
+        </p>
+    </div>
+
+    <div *ngIf="requests.length > 0" class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                            Profesor
+                        </th>
+
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                            Grupo
+                        </th>
+
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                            Fecha y Horario
+                        </th>
+
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                            Alumnos
+                        </th>
+
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                            Solicitado
+                        </th>
+
+                        <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-gray-200">
+                    <tr *ngFor="let request of requests" class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div>
+                                <p class="font-medium text-gray-900">
+                                    {{ request.professor }}
+                                </p>
+
+                                <p class="text-sm text-gray-600">
+                                    {{ request.email }}
+                                </p>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <p class="text-sm text-gray-900">
+                                {{ request.group }}
+                            </p>
+
+                            <p class="text-xs text-gray-600">
+                                {{ request.faculty }}
+                            </p>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <div class="flex flex-col gap-1">
+                                <p class="text-sm text-gray-900">
+                                    {{ request.date }}
+                                </p>
+
+                                <p class="text-sm text-gray-600">
+                                    {{ request.schedule }}
+                                </p>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <span class="text-sm text-gray-900">
+                                {{ request.studentCount }}
+                            </span>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <span class="text-sm text-gray-600">
+                                {{ request.submittedDate }}
+                            </span>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <div class="flex items-center justify-center gap-2">
+                                <button (click)="handleViewDetails(request)"
+                                    class="p-2 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+                                    Ver
+                                </button>
+
+                                <button (click)="handleApprove(request.id)"
+                                    class="p-2 text-green-700 hover:bg-green-50 rounded-lg transition-colors">
+                                    Aprobar
+                                </button>
+
+                                <button (click)="handleReject(request.id)"
+                                    class="p-2 text-red-700 hover:bg-red-50 rounded-lg transition-colors">
+                                    Rechazar
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div *ngIf="showDetailModal && selectedRequest"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-900">
+                    Detalles de la Solicitud
+                </h3>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <div>
+                    <label class="text-sm font-medium text-gray-500">
+                        Profesor
+                    </label>
+
+                    <p class="text-lg font-semibold text-gray-900">
+                        {{ selectedRequest.professor }}
+                    </p>
+
+                    <p class="text-sm text-gray-600">
+                        {{ selectedRequest.email }}
+                    </p>
+                </div>
+
+                <div>
+                    <label class="text-sm font-medium text-gray-500">
+                        Grupo
+                    </label>
+
+                    <p class="text-gray-900">
+                        {{ selectedRequest.group }}
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">
+                            Fecha
+                        </label>
+
+                        <p class="text-gray-900">
+                            {{ selectedRequest.date }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">
+                            Horario
+                        </label>
+
+                        <p class="text-gray-900">
+                            {{ selectedRequest.schedule }}
+                        </p>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-sm font-medium text-gray-500">
+                        Número de Alumnos
+                    </label>
+
+                    <p class="text-gray-900">
+                        {{ selectedRequest.studentCount }}
+                    </p>
+                </div>
+
+                <div>
+                    <label class="text-sm font-medium text-gray-500">
+                        Motivo del Uso
+                    </label>
+
+                    <p class="text-gray-900 leading-relaxed">
+                        {{ selectedRequest.purpose }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="p-6 border-t border-gray-200 flex gap-3">
+                <button (click)="closeModal()"
+                    class="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                    Cerrar
+                </button>
+
+                <button (click)="handleReject(selectedRequest.id); closeModal()"
+                    class="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
+                    Rechazar
+                </button>
+
+                <button (click)="handleApprove(selectedRequest.id); closeModal()"
+                    class="flex-1 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
+                    Aprobar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
