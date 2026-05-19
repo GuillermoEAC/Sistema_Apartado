@@ -39,19 +39,20 @@ export class LoginComponent {
     this.authService
       .login({ correo: correo ?? '', password: password ?? '' })
       .subscribe({
-        next: () => {
-          // Redirect based on role
-          const role = this.authService.userRole();
-          if (role === 'admin') {
-            this.router.navigateByUrl('/admin/dashboard');
+        next: (response) => {
+          this.isSubmitting = false;
+          if (response.user.rol === 'admin') {
+            void this.router.navigateByUrl('/admin/dashboard');
           } else {
-            this.router.navigateByUrl('/app/dashboard');
+            void this.router.navigateByUrl('/app/dashboard');
           }
         },
         error: (err) => {
           this.isSubmitting = false;
           this.errorMessage =
-            err?.error?.message ?? 'Credenciales inválidas. Verifica tu correo y contraseña.';
+            err?.error?.message ??
+            err?.message ??
+            'No se pudo iniciar sesion. Verifica que el backend este corriendo.';
         },
       });
   }
