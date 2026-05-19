@@ -4,44 +4,25 @@
         <p>Consulta y administra tus reservas activas y programadas.</p>
     </div>
 
+    <p *ngIf="loading" class="text-gray-600">Cargando registros...</p>
+    <p *ngIf="error" class="text-red-700">{{ error }}</p>
+
     <div class="lista-reservas">
-        <article class="reserva-card">
+        <article *ngFor="let item of items" class="reserva-card">
             <div class="info">
-                <h3>Laboratorio de programación</h3>
-                <p>Grupo 4A · 20 de marzo · 10:00 a 12:00</p>
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.details }}</p>
             </div>
 
             <div class="acciones">
-                <span class="estado activa">Activa</span>
-                <button class="btn-secundario">Reprogramar</button>
-                <button class="btn-peligro">Cancelar</button>
+                <span class="estado" [ngClass]="item.status">{{ item.status }}</span>
+                <button *ngIf="item.status === 'pendiente' || item.status === 'activa'" class="btn-peligro"
+                    (click)="cancel(item)">
+                    Cancelar
+                </button>
             </div>
         </article>
 
-        <article class="reserva-card">
-            <div class="info">
-                <h3>Uso académico</h3>
-                <p>Grupo 2B · 22 de marzo · 08:00 a 10:00</p>
-            </div>
-
-            <div class="acciones">
-                <span class="estado pendiente">Pendiente</span>
-                <button class="btn-secundario">Reprogramar</button>
-                <button class="btn-peligro">Cancelar</button>
-            </div>
-        </article>
-
-        <article class="reserva-card">
-            <div class="info">
-                <h3>Práctica de cómputo</h3>
-                <p>Grupo 6C · 25 de marzo · 12:00 a 14:00</p>
-            </div>
-
-            <div class="acciones">
-                <span class="estado programada">Programada</span>
-                <button class="btn-secundario">Reprogramar</button>
-                <button class="btn-peligro">Cancelar</button>
-            </div>
-        </article>
+        <p *ngIf="!loading && items.length === 0" class="text-gray-600">Aún no tienes solicitudes o reservas.</p>
     </div>
 </section>

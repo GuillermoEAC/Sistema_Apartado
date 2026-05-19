@@ -8,12 +8,15 @@
     </div>
 </section>
 
+<p *ngIf="loading" class="text-gray-600">Cargando resumen...</p>
+<p *ngIf="error" class="text-red-700">{{ error }}</p>
+
 <!-- 2. Tarjetas resumen -->
 <section class="tarjetas-resumen">
     <article class="tarjeta-stat">
         <div class="stat-info">
             <span class="etiqueta">Reservas activas</span>
-            <strong class="valor">3</strong>
+            <strong class="valor">{{ stats.reservas_activas }}</strong>
             <span class="secundario">En curso o pronto</span>
         </div>
         <div class="stat-icon success">
@@ -26,7 +29,7 @@
     <article class="tarjeta-stat">
         <div class="stat-info">
             <span class="etiqueta">Solicitudes pendientes</span>
-            <strong class="valor">2</strong>
+            <strong class="valor">{{ stats.solicitudes_pendientes }}</strong>
             <span class="secundario">Requieren atención</span>
         </div>
         <div class="stat-icon warning">
@@ -39,9 +42,9 @@
 
     <article class="tarjeta-stat">
         <div class="stat-info">
-            <span class="etiqueta">Próxima reserva</span>
-            <strong class="valor">20 mar · 10:00</strong>
-            <span class="secundario">Laboratorio de prog.</span>
+            <span class="etiqueta">Total de solicitudes</span>
+            <strong class="valor">{{ stats.total_solicitudes }}</strong>
+            <span class="secundario">Registradas en el sistema</span>
         </div>
         <div class="stat-icon primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -55,9 +58,9 @@
 
     <article class="tarjeta-stat">
         <div class="stat-info">
-            <span class="etiqueta">Historial reciente</span>
-            <strong class="valor">8 registros</strong>
-            <span class="secundario">Últimos 30 días</span>
+            <span class="etiqueta">Total de reservas</span>
+            <strong class="valor">{{ stats.total_reservas }}</strong>
+            <span class="secundario">Aprobadas o registradas</span>
         </div>
         <div class="stat-icon purple">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -104,44 +107,9 @@
                 <h3>Próximas reservas</h3>
             </div>
             <div class="lista-reservas">
-                <article class="reserva-card">
-                    <div class="reserva-header">
-                        <span class="badge-estado aprobado">Aprobado</span>
-                        <span class="reserva-fecha">20 mar</span>
-                    </div>
-                    <div class="reserva-body">
-                        <h4>Laboratorio de programación</h4>
-                        <p class="reserva-detalles">
-                            Grupo 4A · 10:00 a 12:00
-                        </p>
-                    </div>
-                </article>
-
-                <article class="reserva-card">
-                    <div class="reserva-header">
-                        <span class="badge-estado pendiente">Pendiente</span>
-                        <span class="reserva-fecha">22 mar</span>
-                    </div>
-                    <div class="reserva-body">
-                        <h4>Uso académico</h4>
-                        <p class="reserva-detalles">
-                            Grupo 2B · 08:00 a 10:00
-                        </p>
-                    </div>
-                </article>
-
-                <article class="reserva-card">
-                    <div class="reserva-header">
-                        <span class="badge-estado bloqueado">Bloqueado</span>
-                        <span class="reserva-fecha">25 mar</span>
-                    </div>
-                    <div class="reserva-body">
-                        <h4>Práctica de cómputo</h4>
-                        <p class="reserva-detalles">
-                            Grupo 6C · 12:00 a 14:00
-                        </p>
-                    </div>
-                </article>
+                <p class="reserva-detalles">
+                    Revisa el apartado “Mis reservas” para ver tus solicitudes pendientes y reservas aprobadas.
+                </p>
             </div>
         </section>
     </aside>
