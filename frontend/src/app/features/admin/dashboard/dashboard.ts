@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AdminApiService } from '../../../core/services/admin-api.service';
 
@@ -21,17 +21,23 @@ export class DashboardComponent implements OnInit {
   loading = true;
   error = '';
 
-  constructor(private readonly adminApi: AdminApiService) {}
+  constructor(
+    private readonly adminApi: AdminApiService,
+    private readonly cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.adminApi.getDashboard().subscribe({
       next: (stats) => {
         this.stats = { ...this.stats, ...stats };
         this.loading = false;
+        this.error = '';
+        this.cdr.detectChanges();
       },
       error: () => {
         this.error = 'No se pudo cargar el resumen administrativo.';
         this.loading = false;
+        this.cdr.detectChanges();
       },
     });
   }
