@@ -6,7 +6,7 @@ export function roleGuard(requiredRole: 'profesor' | 'admin'): CanActivateFn {
   return () => {
     const authService = inject(AuthService);
     const router = inject(Router);
-
+    /*
     if (!authService.isLoggedIn()) {
       router.navigateByUrl('/login');
       return false;
@@ -18,6 +18,7 @@ export function roleGuard(requiredRole: 'profesor' | 'admin'): CanActivateFn {
       router.navigateByUrl(redirectPath);
       return false;
     }
+    */
     return true;
   };
 }

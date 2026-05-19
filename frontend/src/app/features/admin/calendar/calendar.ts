@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
+import { FullCalendarModule } from '@fullcalendar/angular';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import timeGridPlugin from '@fullcalendar/timegrid';
+
 interface Reservation {
   day: string;
   hour: string;
@@ -12,158 +17,94 @@ interface Reservation {
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FullCalendarModule],
   templateUrl: './calendar.html',
   styleUrl: './calendar.scss',
 })
 export class Calendar {
 
-  days = [
-    'Lunes',
-    'Martes',
-    'Miércoles',
-    'Jueves',
-    'Viernes',
-  ];
-
-  hours = [
-    '07:00',
-    '08:00',
-    '09:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '14:00',
-    '15:00',
-    '16:00',
-    '17:00',
-    '18:00',
-  ];
-
   reservations: Reservation[] = [
-    {
-      day: 'Lunes',
-      hour: '09:00',
-      professor: 'Dr. Juan Pérez',
-      group: 'Grupo A',
-      status: 'reserved',
-    },
-    {
-      day: 'Lunes',
-      hour: '14:00',
-      professor: 'Dra. María González',
-      group: 'Grupo B',
-      status: 'pending',
-    },
-    {
-      day: 'Martes',
-      hour: '10:00',
-      professor: 'Ing. Carlos Rodríguez',
-      group: 'Grupo C',
-      status: 'reserved',
-    },
-    {
-      day: 'Martes',
-      hour: '15:00',
-      professor: 'Sistema',
-      group: 'Mantenimiento',
-      status: 'blocked',
-    },
-    {
-      day: 'Miércoles',
-      hour: '08:00',
-      professor: 'Dr. Juan Pérez',
-      group: 'Grupo A',
-      status: 'reserved',
-    },
-    {
-      day: 'Miércoles',
-      hour: '11:00',
-      professor: 'Dra. Ana Martínez',
-      group: 'Grupo D',
-      status: 'pending',
-    },
-    {
-      day: 'Jueves',
-      hour: '09:00',
-      professor: 'Ing. Roberto Silva',
-      group: 'Grupo E',
-      status: 'reserved',
-    },
-    {
-      day: 'Viernes',
-      hour: '10:00',
-      professor: 'Dra. María González',
-      group: 'Grupo B',
-      status: 'reserved',
-    },
-    {
-      day: 'Viernes',
-      hour: '13:00',
-      professor: 'Dr. Fernando López',
-      group: 'Grupo F',
-      status: 'pending',
-    },
+    { day: 'Lunes', hour: '09:00', professor: 'Dr. Juan Pérez', group: 'Grupo A', status: 'reserved' },
+    { day: 'Lunes', hour: '14:00', professor: 'Dra. María González', group: 'Grupo B', status: 'pending' },
+    { day: 'Martes', hour: '10:00', professor: 'Ing. Carlos Rodríguez', group: 'Grupo C', status: 'reserved' },
+    { day: 'Martes', hour: '15:00', professor: 'Sistema', group: 'Mantenimiento', status: 'blocked' },
+    { day: 'Miércoles', hour: '08:00', professor: 'Dr. Juan Pérez', group: 'Grupo A', status: 'reserved' },
+    { day: 'Miércoles', hour: '11:00', professor: 'Dra. Ana Martínez', group: 'Grupo D', status: 'pending' },
+    { day: 'Jueves', hour: '09:00', professor: 'Ing. Roberto Silva', group: 'Grupo E', status: 'reserved' },
+    { day: 'Viernes', hour: '10:00', professor: 'Dra. María González', group: 'Grupo B', status: 'reserved' },
+    { day: 'Viernes', hour: '13:00', professor: 'Dr. Fernando López', group: 'Grupo F', status: 'pending' },
   ];
 
-  getReservation(day: string, hour: string): Reservation | undefined {
-    return this.reservations.find(
-      (r) => r.day === day && r.hour === hour
-    );
-  }
+  // Semana ejemplo (ajústala si quieres)
+  baseWeekDates: any = {
+    'Lunes': '2026-03-16',
+    'Martes': '2026-03-17',
+    'Miércoles': '2026-03-18',
+    'Jueves': '2026-03-19',
+    'Viernes': '2026-03-20',
+  };
 
-  getStatusColor(status: string): string {
+  getColorByStatus(status: string): string {
     switch (status) {
       case 'reserved':
-        return 'bg-green-100 border-green-300 text-green-900';
-
+        return '#3b82f6'; // azul
       case 'pending':
-        return 'bg-yellow-100 border-yellow-300 text-yellow-900';
-
+        return '#f59e0b'; // amarillo
       case 'blocked':
-        return 'bg-red-100 border-red-300 text-red-900';
-
+        return '#ef4444'; // rojo
       default:
-        return 'bg-white border-gray-200 text-gray-600';
+        return '#10b981'; // verde
     }
   }
 
-  getDayDate(day: string): string {
-    switch (day) {
-      case 'Lunes':
-        return '13 Mar';
+  // Convertimos reservations[] a eventos FullCalendar
+  getEvents() {
+    return this.reservations.map((r) => {
+      const date = this.baseWeekDates[r.day];
+      const start = `${date}T${r.hour}:00`;
 
-      case 'Martes':
-        return '14 Mar';
+      // evento dura 1 hora
+      const endHour = Number(r.hour.split(':')[0]) + 1;
+      const end = `${date}T${endHour.toString().padStart(2, '0')}:00:00`;
 
-      case 'Miércoles':
-        return '15 Mar';
-
-      case 'Jueves':
-        return '16 Mar';
-
-      default:
-        return '17 Mar';
-    }
+      return {
+        title: `${r.group} - ${r.professor}`,
+        start: start,
+        end: end,
+        color: this.getColorByStatus(r.status),
+      };
+    });
   }
 
-  getReservedCount(): number {
-    return this.reservations.filter(
-      (r) => r.status === 'reserved'
-    ).length;
-  }
+  calendarOptions: any = {
+    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+    initialView: 'timeGridWeek',
+    height: 'auto',
+    locale: 'es',
+    firstDay: 1,
+    weekends: false,
+    allDaySlot: false,
+    slotMinTime: '07:00:00',
+    slotMaxTime: '19:00:00',
+    slotDuration: '01:00:00',
+    nowIndicator: true,
 
-  getPendingCount(): number {
-    return this.reservations.filter(
-      (r) => r.status === 'pending'
-    ).length;
-  }
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'timeGridWeek,dayGridMonth',
+    },
 
-  getBlockedCount(): number {
-    return this.reservations.filter(
-      (r) => r.status === 'blocked'
-    ).length;
-  }
+    buttonText: {
+      today: 'Hoy',
+      week: 'Semana',
+      month: 'Mes',
+    },
 
+    events: this.getEvents(),
+
+    eventClick: (info: any) => {
+      alert(`Reserva: ${info.event.title}`);
+    },
+  };
 }
