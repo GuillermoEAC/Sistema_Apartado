@@ -13,11 +13,19 @@ export class DashboardComponent implements OnInit {
   nombreUsuario: string = 'Usuario';
 
   ngOnInit(): void {
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+
     const sesion = localStorage.getItem('usuario') || localStorage.getItem('user');
 
     if (sesion) {
-      const datosUsuario = JSON.parse(sesion);
-      this.nombreUsuario = datosUsuario.nombre || datosUsuario.name || 'Usuario';
+      try {
+        const datosUsuario = JSON.parse(sesion);
+        this.nombreUsuario = datosUsuario.nombre || datosUsuario.name || 'Usuario';
+      } catch {
+        this.nombreUsuario = 'Usuario';
+      }
     }
   }
 

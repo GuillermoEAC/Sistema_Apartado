@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AdminApiService } from '../../../core/services/admin-api.service';
 
 interface Request {
   id: string;
@@ -21,57 +22,57 @@ interface Request {
   templateUrl: './requests.html',
   styleUrl: './requests.scss',
 })
-export class Requests {
-  requests: Request[] = [
-    {
-      id: '1',
-      professor: 'Dr. Juan Pérez',
-      email: 'juan.perez@universidad.edu',
-      group: 'Grupo A - Programación I',
-      studentCount: 30,
-      date: 'Lunes, 20 Mar 2026',
-      schedule: '09:00 - 11:00',
-      purpose: 'Práctica de desarrollo de aplicaciones web con React',
-      submittedDate: '10 Mar 2026',
-      faculty: 'Facultad de Ingeniería',
-    },
-    {
-      id: '2',
-      professor: 'Dra. María González',
-      email: 'maria.gonzalez@universidad.edu',
-      group: 'Grupo B - Bases de Datos',
-      studentCount: 25,
-      date: 'Martes, 21 Mar 2026',
-      schedule: '14:00 - 16:00',
-      purpose: 'Laboratorio de SQL y consultas complejas',
-      submittedDate: '11 Mar 2026',
-      faculty: 'Facultad de Ingeniería',
-    },
-    {
-      id: '3',
-      professor: 'Ing. Carlos Rodríguez',
-      email: 'carlos.rodriguez@universidad.edu',
-      group: 'Grupo C - Redes',
-      studentCount: 28,
-      date: 'Miércoles, 22 Mar 2026',
-      schedule: '10:00 - 12:00',
-      purpose: 'Configuración de switches y routers',
-      submittedDate: '11 Mar 2026',
-      faculty: 'Facultad de Ingeniería',
-    },
-  ];
+export class Requests implements OnInit {
+  requests: Request[] = [];
 
   selectedRequest: Request | null = null;
   showDetailModal = false;
+  loading = true;
+  error = '';
+
+  constructor(private readonly adminApi: AdminApiService) {}
+
+  ngOnInit(): void {
+    this.loadRequests();
+  }
+
+  loadRequests(): void {
+    this.loading = true;
+    this.adminApi.getRequests('pendiente').subscribe({
+      next: (response) => {
+        this.requests = response.data.map((request) => this.mapRequest(request));
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'No se pudieron cargar las solicitudes.';
+        this.loading = false;
+      },
+    });
+  }
 
   handleApprove(id: string): void {
-    console.log('Aprobar solicitud:', id);
-    this.requests = this.requests.filter((r) => r.id !== id);
+    this.adminApi.approveRequest(id).subscribe({
+      next: () => {
+        this.requests = this.requests.filter((r) => r.id !== id);
+      },
+      error: () => {
+        this.error = 'No se pudo aprobar la solicitud.';
+      },
+    });
   }
 
   handleReject(id: string): void {
-    console.log('Rechazar solicitud:', id);
-    this.requests = this.requests.filter((r) => r.id !== id);
+    const motivo = window.prompt('Motivo del rechazo:', 'Solicitud rechazada por administración') ?? '';
+    if (!motivo.trim()) return;
+
+    this.adminApi.rejectRequest(id, motivo).subscribe({
+      next: () => {
+        this.requests = this.requests.filter((r) => r.id !== id);
+      },
+      error: () => {
+        this.error = 'No se pudo rechazar la solicitud.';
+      },
+    });
   }
 
   handleViewDetails(request: Request): void {
@@ -82,5 +83,36 @@ export class Requests {
   closeModal(): void {
     this.showDetailModal = false;
     this.selectedRequest = null;
+  }
+
+  private mapRequest(request: any): Request {
+    const usuario = request.usuario ?? {};
+    const professor = [usuario.nombre, usuario.apellido1, usuario.apellido2].filter(Boolean).join(' ') || 'Profesor';
+
+    return {
+      id: String(request.id_solicitud),
+      professor,
+      email: usuario.correo ?? 'Sin correo',
+      group: `${request.grupo ?? 'Sin grupo'}${request.materia ? ` - ${request.materia}` : ''}`,
+      studentCount: Number(request.num_alumnos ?? 0),
+      date: this.formatDate(request.fecha_uso),
+      schedule: `${this.formatHour(request.hora_inicio)} - ${this.formatHour(request.hora_fin)}`,
+      purpose: request.motivo ?? 'Sin motivo indicado',
+      submittedDate: this.formatDate(request.created_at),
+      faculty: usuario.facultad ?? request.centro?.nombre ?? 'Sin facultad',
+    };
+  }
+
+  private formatDate(value: string): string {
+    if (!value) return 'Sin fecha';
+    return new Date(value).toLocaleDateString('es-MX', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  }
+
+  private formatHour(value: string): string {
+    return value?.slice(0, 5) ?? '--:--';
   }
 }

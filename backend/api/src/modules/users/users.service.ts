@@ -10,6 +10,9 @@ export class UsersService {
 
     findAll(page = 1, limit = 20, buscar?: string) {
         const qb = this.repo.createQueryBuilder('u')
+            .leftJoin('reserva', 'r', 'r.id_usuario = u.id_usuario')
+            .addSelect('COUNT(r.id_reserva)', 'reservation_count')
+            .groupBy('u.id_usuario')
             .orderBy('u.created_at', 'DESC');
 
         if (buscar) {
@@ -19,11 +22,36 @@ export class UsersService {
         return qb
             .skip((page - 1) * limit)
             .take(limit)
-            .getManyAndCount()
-            .then(([data, total]) => ({
-                data, total, page, limit,
+            .getRawAndEntities()
+            .then(async ({ entities, raw }) => {
+                const totalQb = this.repo.createQueryBuilder('u');
+                if (buscar) {
+                    totalQb.andWhere('(u.nombre LIKE :b OR u.apellido1 LIKE :b OR u.correo LIKE :b)', { b: `%${buscar}%` });
+                }
+                const total = await totalQb.getCount();
+
+                const data = entities.map((user, index) => ({
+                    ...user,
+                    reservation_count: Number(raw[index]?.reservation_count ?? 0),
+                    admin_view: {
+                        id: String(user.id_usuario),
+                        name: `${user.nombre} ${user.apellido1}${user.apellido2 ? ` ${user.apellido2}` : ''}`,
+                        email: user.correo,
+                        faculty: user.facultad ?? 'Sin facultad',
+                        active: user.activo,
+                        reservationCount: Number(raw[index]?.reservation_count ?? 0),
+                        joinedDate: user.created_at,
+                    },
+                }));
+
+                return {
+                    data,
+                    total,
+                    page,
+                    limit,
                 totalPages: Math.ceil(total / limit),
-            }));
+                };
+            });
     }
 
     async findById(id: number): Promise<User> {
@@ -33,7 +61,11 @@ export class UsersService {
     }
 
     async findByEmail(correo: string): Promise<User | null> {
-        return this.repo.findOne({ where: { correo } });
+        return this.repo
+            .createQueryBuilder('u')
+            .addSelect('u.password_hash')
+            .where('u.correo = :correo', { correo })
+            .getOne();
     }
 
     async create(data: {
@@ -62,6 +94,12 @@ export class UsersService {
         const user = await this.findById(id);
         await this.repo.update(id, { activo: !user.activo });
         return { message: `Usuario ${!user.activo ? 'activado' : 'desactivado'}` };
+    }
+
+    async deactivate(id: number) {
+        await this.findById(id);
+        await this.repo.update(id, { activo: false });
+        return { message: 'Usuario desactivado' };
     }
 
     async updatePassword(id: number, newPassword: string) {

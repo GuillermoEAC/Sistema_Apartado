@@ -18,10 +18,18 @@ export class TeacherLayoutComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit(): void {
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+
     const sesion = localStorage.getItem('usuario') || localStorage.getItem('user');
 
     if (sesion) {
-      this.datosUsuario = JSON.parse(sesion);
+      try {
+        this.datosUsuario = JSON.parse(sesion);
+      } catch {
+        this.datosUsuario = null;
+      }
     }
   }
 
@@ -32,7 +40,12 @@ export class TeacherLayoutComponent implements OnInit {
 
   // 4. FIX ERROR 2: El HTML busca la función logout() al hacer clic
   logout() {
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+
     // Borramos los datos de la sesión local
+    localStorage.removeItem('access_token');
     localStorage.removeItem('usuario');
     localStorage.removeItem('user');
 

@@ -6,25 +6,28 @@
         </div>
     </div>
 
+    <p *ngIf="loading" class="text-gray-600">Cargando resumen...</p>
+    <p *ngIf="error" class="text-red-700">{{ error }}</p>
+
     <div class="tarjetas-resumen">
         <article class="tarjeta">
             <span class="etiqueta">Solicitudes pendientes</span>
-            <strong>8</strong>
+            <strong>{{ stats.solicitudes_pendientes }}</strong>
         </article>
 
         <article class="tarjeta">
             <span class="etiqueta">Reservas del día</span>
-            <strong>12</strong>
+            <strong>{{ stats.reservas_hoy }}</strong>
         </article>
 
         <article class="tarjeta">
             <span class="etiqueta">Horarios bloqueados</span>
-            <strong>4</strong>
+            <strong>{{ stats.bloqueos_activos }}</strong>
         </article>
 
         <article class="tarjeta">
             <span class="etiqueta">Usuarios activos</span>
-            <strong>27</strong>
+            <strong>{{ stats.usuarios_activos }}</strong>
         </article>
     </div>
 
@@ -62,31 +65,7 @@
                 <h3>Actividad reciente</h3>
             </div>
 
-            <div class="lista-actividad">
-                <article class="actividad-item">
-                    <div>
-                        <h4>Solicitud aprobada</h4>
-                        <p>Profesor Juan Pérez · 20 de marzo · 10:00 a 12:00</p>
-                    </div>
-                    <span class="estado aprobado">Aprobada</span>
-                </article>
-
-                <article class="actividad-item">
-                    <div>
-                        <h4>Horario bloqueado</h4>
-                        <p>Mantenimiento del aula · 22 de marzo · 08:00 a 10:00</p>
-                    </div>
-                    <span class="estado bloqueado">Bloqueado</span>
-                </article>
-
-                <article class="actividad-item">
-                    <div>
-                        <h4>Reserva cancelada</h4>
-                        <p>Profesor Ana López · 25 de marzo · 12:00 a 14:00</p>
-                    </div>
-                    <span class="estado cancelado">Cancelada</span>
-                </article>
-            </div>
+            <p class="text-gray-600">La actividad real se consulta desde el apartado Historial.</p>
         </section>
     </div>
 </section>

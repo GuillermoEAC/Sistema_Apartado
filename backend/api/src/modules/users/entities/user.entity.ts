@@ -27,7 +27,7 @@ export class User {
     correo: string;
 
     @Exclude()
-    @Column({ length: 255, name: 'password_hash' })
+    @Column({ length: 255, name: 'password_hash', select: false })
     password_hash: string;
 
     @Column({ length: 20, nullable: true })

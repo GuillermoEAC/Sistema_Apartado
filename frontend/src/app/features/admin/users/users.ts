@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AdminApiService } from '../../../core/services/admin-api.service';
 
 interface User {
   id: string;
@@ -19,56 +20,32 @@ interface User {
   templateUrl: './users.html',
   styleUrl: './users.scss',
 })
-export class Users {
+export class Users implements OnInit {
   searchTerm = '';
+  loading = true;
+  error = '';
 
-  users: User[] = [
-    {
-      id: '1',
-      name: 'Dr. Juan Pérez',
-      email: 'juan.perez@universidad.edu',
-      faculty: 'Facultad de Ingeniería',
-      active: true,
-      reservationCount: 12,
-      joinedDate: 'Ene 2025',
-    },
-    {
-      id: '2',
-      name: 'Dra. María González',
-      email: 'maria.gonzalez@universidad.edu',
-      faculty: 'Facultad de Ingeniería',
-      active: true,
-      reservationCount: 8,
-      joinedDate: 'Feb 2025',
-    },
-    {
-      id: '3',
-      name: 'Ing. Carlos Rodríguez',
-      email: 'carlos.rodriguez@universidad.edu',
-      faculty: 'Facultad de Ingeniería',
-      active: true,
-      reservationCount: 15,
-      joinedDate: 'Dic 2024',
-    },
-    {
-      id: '4',
-      name: 'Dra. Ana Martínez',
-      email: 'ana.martinez@universidad.edu',
-      faculty: 'Facultad de Ciencias',
-      active: true,
-      reservationCount: 6,
-      joinedDate: 'Mar 2025',
-    },
-    {
-      id: '5',
-      name: 'Dr. Roberto Silva',
-      email: 'roberto.silva@universidad.edu',
-      faculty: 'Facultad de Ingeniería',
-      active: false,
-      reservationCount: 3,
-      joinedDate: 'Nov 2024',
-    },
-  ];
+  users: User[] = [];
+
+  constructor(private readonly adminApi: AdminApiService) {}
+
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
+  loadUsers(): void {
+    this.loading = true;
+    this.adminApi.getUsers().subscribe({
+      next: (response) => {
+        this.users = response.data.map((user) => this.mapUser(user));
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'No se pudieron cargar los usuarios.';
+        this.loading = false;
+      },
+    });
+  }
 
   get filteredUsers(): User[] {
     return this.users.filter(
@@ -80,11 +57,16 @@ export class Users {
   }
 
   toggleUserStatus(id: string): void {
-    this.users = this.users.map((user) =>
-      user.id === id
-        ? { ...user, active: !user.active }
-        : user
-    );
+    this.adminApi.toggleUser(id).subscribe({
+      next: () => {
+        this.users = this.users.map((user) =>
+          user.id === id ? { ...user, active: !user.active } : user
+        );
+      },
+      error: () => {
+        this.error = 'No se pudo cambiar el estado del usuario.';
+      },
+    });
   }
 
   handleDeleteUser(id: string): void {
@@ -93,7 +75,42 @@ export class Users {
     );
 
     if (confirmDelete) {
-      this.users = this.users.filter((user) => user.id !== id);
+      this.adminApi.deleteUser(id).subscribe({
+        next: () => {
+          this.users = this.users.filter((user) => user.id !== id);
+        },
+        error: () => {
+          this.error = 'No se pudo desactivar el usuario.';
+        },
+      });
     }
+  }
+
+  private mapUser(user: any): User {
+    const view = user.admin_view;
+    if (view) {
+      return {
+        ...view,
+        joinedDate: this.formatDate(view.joinedDate),
+      };
+    }
+
+    return {
+      id: String(user.id_usuario),
+      name: [user.nombre, user.apellido1, user.apellido2].filter(Boolean).join(' '),
+      email: user.correo,
+      faculty: user.facultad ?? 'Sin facultad',
+      active: Boolean(user.activo),
+      reservationCount: Number(user.reservation_count ?? 0),
+      joinedDate: this.formatDate(user.created_at),
+    };
+  }
+
+  private formatDate(value: string): string {
+    if (!value) return 'Sin fecha';
+    return new Date(value).toLocaleDateString('es-MX', {
+      year: 'numeric',
+      month: 'short',
+    });
   }
 }

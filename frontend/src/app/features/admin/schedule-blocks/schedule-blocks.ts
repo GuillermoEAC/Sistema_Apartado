@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
+import { AdminApiService } from '../../../core/services/admin-api.service';
 
 interface BlockedSchedule {
   id: string;
@@ -18,26 +19,12 @@ interface BlockedSchedule {
   templateUrl: './schedule-blocks.html',
   styleUrl: './schedule-blocks.scss',
 })
-export class ScheduleBlocks {
+export class ScheduleBlocks implements OnInit {
 
-  blockedSchedules: BlockedSchedule[] = [
-    {
-      id: '1',
-      date: '2026-03-14',
-      startTime: '15:00',
-      endTime: '17:00',
-      reason: 'Mantenimiento de equipos',
-      createdBy: 'Admin',
-    },
-    {
-      id: '2',
-      date: '2026-03-21',
-      startTime: '08:00',
-      endTime: '10:00',
-      reason: 'Actualización de software',
-      createdBy: 'Admin',
-    },
-  ];
+  blockedSchedules: BlockedSchedule[] = [];
+  loading = true;
+  saving = false;
+  error = '';
 
   formData = {
     date: '',
@@ -46,27 +33,55 @@ export class ScheduleBlocks {
     reason: '',
   };
 
-  handleSubmit(): void {
-    const newBlock: BlockedSchedule = {
-      id: Date.now().toString(),
-      date: this.formData.date,
-      startTime: this.formData.startTime,
-      endTime: this.formData.endTime,
-      reason: this.formData.reason,
-      createdBy: 'Admin',
-    };
+  constructor(
+    private readonly adminApi: AdminApiService,
+    private readonly cdr: ChangeDetectorRef,
+  ) {}
 
-    this.blockedSchedules = [
-      ...this.blockedSchedules,
-      newBlock,
-    ];
+  ngOnInit(): void {
+    this.loadBlocks();
+  }
 
-    this.formData = {
-      date: '',
-      startTime: '',
-      endTime: '',
-      reason: '',
-    };
+  loadBlocks(): void {
+    this.loading = true;
+    this.adminApi.getBlocks().subscribe({
+      next: (blocks) => {
+        this.blockedSchedules = blocks.map((block) => this.mapBlock(block));
+        this.loading = false;
+        this.error = '';
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.error = 'No se pudieron cargar los bloqueos.';
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  handleSubmit(form: NgForm): void {
+    if (form.invalid || this.saving) {
+      form.control.markAllAsTouched();
+      return;
+    }
+
+    this.saving = true;
+    this.error = '';
+
+    this.adminApi.createBlock({ ...this.formData }).subscribe({
+      next: () => {
+        this.saving = false;
+        this.formData = this.emptyForm();
+        form.resetForm(this.emptyForm());
+        this.loadBlocks();
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.saving = false;
+        this.error = 'No se pudo crear el bloqueo.';
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   handleDelete(id: string): void {
@@ -75,9 +90,17 @@ export class ScheduleBlocks {
     );
 
     if (confirmDelete) {
-      this.blockedSchedules = this.blockedSchedules.filter(
-        (b) => b.id !== id
-      );
+      this.adminApi.deleteBlock(id).subscribe({
+        next: () => {
+          this.error = '';
+          this.loadBlocks();
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.error = 'No se pudo eliminar el bloqueo.';
+          this.cdr.detectChanges();
+        },
+      });
     }
   }
 
@@ -90,5 +113,31 @@ export class ScheduleBlocks {
       month: 'long',
       day: 'numeric',
     });
+  }
+
+  private mapBlock(block: any): BlockedSchedule {
+    const start = new Date(block.fecha_inicio);
+    const end = new Date(block.fecha_fin);
+    const admin = block.admin
+      ? [block.admin.nombre, block.admin.apellido1].filter(Boolean).join(' ')
+      : 'Admin';
+
+    return {
+      id: String(block.id_bloqueo),
+      date: start.toISOString().slice(0, 10),
+      startTime: start.toTimeString().slice(0, 5),
+      endTime: end.toTimeString().slice(0, 5),
+      reason: block.motivo,
+      createdBy: admin,
+    };
+  }
+
+  private emptyForm() {
+    return {
+      date: '',
+      startTime: '',
+      endTime: '',
+      reason: '',
+    };
   }
 }

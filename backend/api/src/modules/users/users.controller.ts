@@ -1,5 +1,5 @@
 import {
-    Controller, Get, Post, Patch, Param, Body, Query,
+    Controller, Delete, Get, Post, Patch, Param, Body, Query,
     UseGuards, ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -51,5 +51,12 @@ export class UsersController {
     @ApiOperation({ summary: 'Activar/desactivar usuario (Admin)' })
     toggleActive(@Param('id', ParseIntPipe) id: number) {
         return this.service.toggleActive(id);
+    }
+
+    @Delete(':id')
+    @Roles('admin')
+    @ApiOperation({ summary: 'Desactivar usuario (Admin)' })
+    remove(@Param('id', ParseIntPipe) id: number) {
+        return this.service.deactivate(id);
     }
 }
