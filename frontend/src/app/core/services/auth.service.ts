@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
-import { tap, map, catchError, throwError } from 'rxjs';
+import { tap, map, catchError, throwError, timeout } from 'rxjs';
 
 export interface AuthUser {
   id: number;
@@ -62,7 +62,8 @@ export class AuthService {
     return this.http
       .post<ApiWrapper<AuthResponse>>(`${this.apiUrl}/login`, payload)
       .pipe(
-        map((res) => res.data),
+        timeout(10000),
+        map((res) => this.unwrapAuthResponse(res)),
         tap((response) => this.saveSession(response)),
         catchError((err) => throwError(() => err)),
       );
@@ -73,7 +74,8 @@ export class AuthService {
     return this.http
       .post<ApiWrapper<AuthResponse>>(`${this.apiUrl}/register`, payload)
       .pipe(
-        map((res) => res.data),
+        timeout(10000),
+        map((res) => this.unwrapAuthResponse(res)),
         tap((response) => this.saveSession(response)),
         catchError((err) => throwError(() => err)),
       );
@@ -94,6 +96,14 @@ export class AuthService {
   }
 
   // Session helpers
+  private unwrapAuthResponse(response: ApiWrapper<AuthResponse> | AuthResponse): AuthResponse {
+    const authResponse = 'data' in response ? response.data : response;
+    if (!authResponse?.access_token || !authResponse?.user) {
+      throw new Error('Respuesta de autenticacion invalida');
+    }
+    return authResponse;
+  }
+
   private saveSession(response: AuthResponse) {
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       localStorage.setItem('access_token', response.access_token);
