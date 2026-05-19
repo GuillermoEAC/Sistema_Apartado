@@ -1,1 +1,14 @@
-<p>calendar works!</p>
+<div class="panel-calendario-vista">
+    <div class="panel-header" style="justify-content: center; margin-bottom: 20px;">
+        <div class="leyenda">
+            <span class="item disponible"><span class="dot"></span> Disponible</span>
+            <span class="item reservado"><span class="dot"></span> Reservado</span>
+            <span class="item pendiente"><span class="dot"></span> Pendiente</span>
+            <span class="item bloqueado"><span class="dot"></span> Bloqueado</span>
+        </div>
+    </div>
+
+    <div class="calendario-preview">
+        <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+</div>
