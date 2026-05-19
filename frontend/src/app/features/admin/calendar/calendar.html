@@ -18,6 +18,8 @@
             </div>
 
             <div class="calendario-preview">
+                <p *ngIf="loading" class="text-gray-600">Cargando calendario...</p>
+                <p *ngIf="error" class="text-red-700">{{ error }}</p>
                 <full-calendar [options]="calendarOptions"></full-calendar>
             </div>
 

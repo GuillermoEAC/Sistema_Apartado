@@ -47,7 +47,7 @@ export class AuthService {
   readonly user = this._user.asReadonly();
 
   /** Whether a user is currently logged in */
-  readonly isLoggedIn = computed(() => !!this._token() && !!this._user());
+  readonly isLoggedIn = computed(() => this.hasSession());
 
   /** Current user role */
   readonly userRole = computed(() => this._user()?.rol ?? null);
@@ -95,6 +95,19 @@ export class AuthService {
     return this._token();
   }
 
+  hasSession(): boolean {
+    return !!this.getToken() && !!this.getCurrentUser();
+  }
+
+  getCurrentUser(): AuthUser | null {
+    const current = this._user();
+    if (current) return current;
+
+    const stored = this.loadUserFromStorage();
+    if (stored) this._user.set(stored);
+    return stored;
+  }
+
   // Session helpers
   private unwrapAuthResponse(response: ApiWrapper<AuthResponse> | AuthResponse): AuthResponse {
     const authResponse = 'data' in response ? response.data : response;
@@ -119,8 +132,17 @@ export class AuthService {
     }
     try {
       const raw = localStorage.getItem('user');
-      return raw ? JSON.parse(raw) : null;
+      if (!raw) return null;
+
+      const parsed = JSON.parse(raw);
+      if (!parsed?.correo || (parsed?.rol !== 'admin' && parsed?.rol !== 'profesor')) {
+        localStorage.removeItem('user');
+        return null;
+      }
+
+      return parsed;
     } catch {
+      localStorage.removeItem('user');
       return null;
     }
   }

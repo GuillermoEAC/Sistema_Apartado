@@ -4,33 +4,26 @@
         <p>Consulta todas las reservas registradas.</p>
     </div>
 
+    <p *ngIf="loading" class="text-gray-600">Cargando historial...</p>
+    <p *ngIf="error" class="text-red-700">{{ error }}</p>
+
     <div class="tabla">
         <div class="fila encabezado">
-            <span>Profesor</span>
-            <span>Grupo</span>
+            <span>Acción</span>
+            <span>Entidad</span>
             <span>Fecha</span>
-            <span>Estado</span>
+            <span>Detalle</span>
         </div>
 
-        <div class="fila">
-            <span>Juan Pérez</span>
-            <span>4A</span>
-            <span>15 mar 2026</span>
-            <span class="estado completado">Completado</span>
-        </div>
-
-        <div class="fila">
-            <span>Ana López</span>
-            <span>2B</span>
-            <span>12 mar 2026</span>
-            <span class="estado cancelado">Cancelado</span>
-        </div>
-
-        <div class="fila">
-            <span>Carlos Ruiz</span>
-            <span>6C</span>
-            <span>10 mar 2026</span>
-            <span class="estado no-asistio">No asistió</span>
+        <div *ngFor="let item of items" class="fila">
+            <span>{{ item.action }}</span>
+            <span>{{ item.entity }}</span>
+            <span>{{ item.date }}</span>
+            <span>{{ item.detail }}</span>
         </div>
     </div>
+
+    <p *ngIf="!loading && items.length === 0" class="text-gray-600">
+        No hay movimientos registrados.
+    </p>
 </section>

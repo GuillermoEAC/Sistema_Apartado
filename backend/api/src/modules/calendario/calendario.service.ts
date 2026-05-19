@@ -51,13 +51,29 @@ export class CalendarioService {
         const eventosBloqueo = bloqueos.map((b) => ({
             id: `bloqueo-${b.id_bloqueo}`,
             title: b.motivo,
-            start: b.fecha_inicio,
-            end: b.fecha_fin,
+            start: this.formatDateTime(b.fecha_inicio),
+            end: this.formatDateTime(b.fecha_fin),
             status: 'blocked',
             color: '#ef4444',
             backgroundColor: '#ef4444',
         }));
 
         return [...eventosReserva, ...eventosBloqueo];
+    }
+
+    private formatDateTime(value: Date) {
+        const pad = (part: number) => String(part).padStart(2, '0');
+
+        return [
+            value.getFullYear(),
+            pad(value.getMonth() + 1),
+            pad(value.getDate()),
+        ].join('-')
+            + 'T'
+            + [
+                pad(value.getHours()),
+                pad(value.getMinutes()),
+                pad(value.getSeconds()),
+            ].join(':');
     }
 }

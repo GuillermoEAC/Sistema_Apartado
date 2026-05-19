@@ -1,18 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 
-import { FullCalendarModule } from '@fullcalendar/angular';
+import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
-
-interface Reservation {
-  day: string;
-  hour: string;
-  professor: string;
-  group: string;
-  status: 'reserved' | 'pending' | 'blocked';
-}
+import { AdminApiService } from '../../../core/services/admin-api.service';
 
 @Component({
   selector: 'app-calendar',
@@ -21,60 +14,16 @@ interface Reservation {
   templateUrl: './calendar.html',
   styleUrl: './calendar.scss',
 })
-export class Calendar {
+export class Calendar implements OnInit {
+  @ViewChild(FullCalendarComponent) calendar?: FullCalendarComponent;
 
-  reservations: Reservation[] = [
-    { day: 'Lunes', hour: '09:00', professor: 'Dr. Juan Pérez', group: 'Grupo A', status: 'reserved' },
-    { day: 'Lunes', hour: '14:00', professor: 'Dra. María González', group: 'Grupo B', status: 'pending' },
-    { day: 'Martes', hour: '10:00', professor: 'Ing. Carlos Rodríguez', group: 'Grupo C', status: 'reserved' },
-    { day: 'Martes', hour: '15:00', professor: 'Sistema', group: 'Mantenimiento', status: 'blocked' },
-    { day: 'Miércoles', hour: '08:00', professor: 'Dr. Juan Pérez', group: 'Grupo A', status: 'reserved' },
-    { day: 'Miércoles', hour: '11:00', professor: 'Dra. Ana Martínez', group: 'Grupo D', status: 'pending' },
-    { day: 'Jueves', hour: '09:00', professor: 'Ing. Roberto Silva', group: 'Grupo E', status: 'reserved' },
-    { day: 'Viernes', hour: '10:00', professor: 'Dra. María González', group: 'Grupo B', status: 'reserved' },
-    { day: 'Viernes', hour: '13:00', professor: 'Dr. Fernando López', group: 'Grupo F', status: 'pending' },
-  ];
+  loading = true;
+  error = '';
 
-  // Semana ejemplo (ajústala si quieres)
-  baseWeekDates: any = {
-    'Lunes': '2026-03-16',
-    'Martes': '2026-03-17',
-    'Miércoles': '2026-03-18',
-    'Jueves': '2026-03-19',
-    'Viernes': '2026-03-20',
-  };
-
-  getColorByStatus(status: string): string {
-    switch (status) {
-      case 'reserved':
-        return '#3b82f6'; // azul
-      case 'pending':
-        return '#f59e0b'; // amarillo
-      case 'blocked':
-        return '#ef4444'; // rojo
-      default:
-        return '#10b981'; // verde
-    }
-  }
-
-  // Convertimos reservations[] a eventos FullCalendar
-  getEvents() {
-    return this.reservations.map((r) => {
-      const date = this.baseWeekDates[r.day];
-      const start = `${date}T${r.hour}:00`;
-
-      // evento dura 1 hora
-      const endHour = Number(r.hour.split(':')[0]) + 1;
-      const end = `${date}T${endHour.toString().padStart(2, '0')}:00:00`;
-
-      return {
-        title: `${r.group} - ${r.professor}`,
-        start: start,
-        end: end,
-        color: this.getColorByStatus(r.status),
-      };
-    });
-  }
+  constructor(
+    private readonly adminApi: AdminApiService,
+    private readonly cdr: ChangeDetectorRef,
+  ) {}
 
   calendarOptions: any = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -85,8 +34,9 @@ export class Calendar {
     weekends: false,
     allDaySlot: false,
     slotMinTime: '07:00:00',
-    slotMaxTime: '19:00:00',
+    slotMaxTime: '24:00:00',
     slotDuration: '01:00:00',
+    scrollTime: '07:00:00',
     nowIndicator: true,
 
     headerToolbar: {
@@ -101,10 +51,31 @@ export class Calendar {
       month: 'Mes',
     },
 
-    events: this.getEvents(),
+    events: [],
 
     eventClick: (info: any) => {
       alert(`Reserva: ${info.event.title}`);
     },
   };
+
+  ngOnInit(): void {
+    this.adminApi.getCalendarEvents().subscribe({
+      next: (events) => {
+        this.calendarOptions = {
+          ...this.calendarOptions,
+          events,
+        };
+        this.loading = false;
+        this.error = '';
+        this.cdr.detectChanges();
+        this.calendar?.getApi().removeAllEvents();
+        this.calendar?.getApi().addEventSource(events);
+      },
+      error: () => {
+        this.error = 'No se pudo cargar el calendario.';
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+    });
+  }
 }
