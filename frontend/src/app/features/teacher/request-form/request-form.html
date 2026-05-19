@@ -4,29 +4,36 @@
         <p>Completa la información para solicitar el uso de la sala de cómputo.</p>
     </div>
 
-    <div class="contenedor-formulario">
+    <form #requestForm="ngForm" (ngSubmit)="enviarSolicitud(requestForm)" class="contenedor-formulario">
         <section class="bloque">
             <h3>Datos del solicitante</h3>
 
             <div class="grid-formulario">
                 <div class="campo">
-                    <label for="nombre">Nombre del solicitante</label>
-                    <input id="nombre" type="text" placeholder="Nombre completo" />
+                    <label for="centro">Centro de cómputo</label>
+                    <select id="centro" name="id_centro" required [(ngModel)]="formData.id_centro">
+                        <option *ngFor="let center of centers" [ngValue]="center.id_centro">
+                            {{ center.nombre }}
+                        </option>
+                    </select>
                 </div>
 
                 <div class="campo">
-                    <label for="correo">Correo institucional</label>
-                    <input id="correo" type="email" placeholder="correo@institucion.edu.mx" />
+                    <label for="materia">Materia</label>
+                    <input id="materia" name="materia" type="text" required [(ngModel)]="formData.materia"
+                        placeholder="Ej. Programación I" />
                 </div>
 
                 <div class="campo">
-                    <label for="telefono">Teléfono</label>
-                    <input id="telefono" type="text" placeholder="6671234567" />
+                    <label for="grupo">Grupo o carrera</label>
+                    <input id="grupo" name="grupo" type="text" required [(ngModel)]="formData.grupo"
+                        placeholder="Ej. Sistemas 4A" />
                 </div>
 
                 <div class="campo">
-                    <label for="facultad">Facultad o unidad académica</label>
-                    <input id="facultad" type="text" placeholder="Nombre de la facultad" />
+                    <label for="alumnos">Número de alumnos</label>
+                    <input id="alumnos" name="num_alumnos" type="number" min="1" max="60" required
+                        [(ngModel)]="formData.num_alumnos" placeholder="30" />
                 </div>
             </div>
         </section>
@@ -37,17 +44,14 @@
             <div class="grid-formulario">
                 <div class="campo campo-completo">
                     <label for="motivo">Motivo de uso</label>
-                    <textarea id="motivo" rows="4" placeholder="Describe el motivo de la solicitud"></textarea>
+                    <textarea id="motivo" name="proposito" rows="4" [(ngModel)]="formData.proposito"
+                        placeholder="Describe el motivo de la solicitud"></textarea>
                 </div>
 
-                <div class="campo">
-                    <label for="grupo">Grupo o carrera</label>
-                    <input id="grupo" type="text" placeholder="Ej. Sistemas 4A" />
-                </div>
-
-                <div class="campo">
-                    <label for="alumnos">Número de alumnos</label>
-                    <input id="alumnos" type="number" placeholder="30" />
+                <div class="campo campo-completo">
+                    <label for="software-requerido">Software requerido</label>
+                    <input id="software-requerido" name="software_requerido" type="text"
+                        [(ngModel)]="formData.software_requerido" placeholder="Ej. Visual Studio Code, MySQL Workbench" />
                 </div>
             </div>
         </section>
@@ -56,17 +60,16 @@
             <h3>Requerimientos</h3>
 
             <div class="requerimientos">
-                <label><input type="checkbox" /> Internet</label>
-                <label><input type="checkbox" /> Equipo de cómputo</label>
-                <label><input type="checkbox" /> Proyector</label>
-                <label><input type="checkbox" /> Software especializado</label>
+                <label><input type="checkbox" name="internet" [(ngModel)]="formData.internet" /> Internet</label>
+                <label><input type="checkbox" name="equipo" [(ngModel)]="formData.equipo" /> Equipo de cómputo</label>
+                <label><input type="checkbox" name="proyector" [(ngModel)]="formData.proyector" /> Proyector</label>
+                <label><input type="checkbox" name="software" [(ngModel)]="formData.software" /> Software especializado</label>
             </div>
         </section>
 
         <section class="bloque">
             <div class="tabla-header">
                 <h3>Fechas y horarios</h3>
-                <button type="button" class="boton-secundario">Agregar horario</button>
             </div>
 
             <div class="tabla-horarios">
@@ -74,29 +77,24 @@
                     <span>Fecha</span>
                     <span>Hora inicio</span>
                     <span>Hora fin</span>
-                    <span>Acción</span>
                 </div>
 
                 <div class="fila">
-                    <input type="date" />
-                    <input type="time" />
-                    <input type="time" />
-                    <button type="button" class="boton-eliminar">Eliminar</button>
-                </div>
-
-                <div class="fila">
-                    <input type="date" />
-                    <input type="time" />
-                    <input type="time" />
-                    <button type="button" class="boton-eliminar">Eliminar</button>
+                    <input type="date" name="fecha_uso" required [(ngModel)]="formData.fecha_uso" />
+                    <input type="time" name="hora_inicio" required [(ngModel)]="formData.hora_inicio" />
+                    <input type="time" name="hora_fin" required [(ngModel)]="formData.hora_fin" />
                 </div>
             </div>
         </section>
 
+        <p *ngIf="loadingCenters" class="text-gray-600">Cargando centros...</p>
+        <p *ngIf="success" class="text-green-700">{{ success }}</p>
+        <p *ngIf="error" class="text-red-700">{{ error }}</p>
+
         <div class="acciones">
-            <button type="button" class="boton-principal" (click)="enviarSolicitud()">
-                Enviar solicitud
+            <button type="submit" class="boton-principal" [disabled]="requestForm.invalid || saving || loadingCenters">
+                {{ saving ? 'Enviando...' : 'Enviar solicitud' }}
             </button>
         </div>
-    </div>
+    </form>
 </section>
