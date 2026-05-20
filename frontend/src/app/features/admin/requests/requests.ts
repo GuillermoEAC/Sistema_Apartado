@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AdminApiService } from '../../../core/services/admin-api.service';
 
 interface Request {
@@ -30,7 +30,10 @@ export class Requests implements OnInit {
   loading = true;
   error = '';
 
-  constructor(private readonly adminApi: AdminApiService) {}
+  constructor(
+    private readonly adminApi: AdminApiService,
+    private readonly cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.loadRequests();
@@ -42,10 +45,13 @@ export class Requests implements OnInit {
       next: (response) => {
         this.requests = response.data.map((request) => this.mapRequest(request));
         this.loading = false;
+        this.error = '';
+        this.cdr.detectChanges();
       },
       error: () => {
         this.error = 'No se pudieron cargar las solicitudes.';
         this.loading = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -54,9 +60,12 @@ export class Requests implements OnInit {
     this.adminApi.approveRequest(id).subscribe({
       next: () => {
         this.requests = this.requests.filter((r) => r.id !== id);
+        this.error = '';
+        this.cdr.detectChanges();
       },
       error: () => {
         this.error = 'No se pudo aprobar la solicitud.';
+        this.cdr.detectChanges();
       },
     });
   }
@@ -68,9 +77,12 @@ export class Requests implements OnInit {
     this.adminApi.rejectRequest(id, motivo).subscribe({
       next: () => {
         this.requests = this.requests.filter((r) => r.id !== id);
+        this.error = '';
+        this.cdr.detectChanges();
       },
       error: () => {
         this.error = 'No se pudo rechazar la solicitud.';
+        this.cdr.detectChanges();
       },
     });
   }
@@ -78,11 +90,13 @@ export class Requests implements OnInit {
   handleViewDetails(request: Request): void {
     this.selectedRequest = request;
     this.showDetailModal = true;
+    this.cdr.detectChanges();
   }
 
   closeModal(): void {
     this.showDetailModal = false;
     this.selectedRequest = null;
+    this.cdr.detectChanges();
   }
 
   private mapRequest(request: any): Request {
@@ -97,7 +111,7 @@ export class Requests implements OnInit {
       studentCount: Number(request.num_alumnos ?? 0),
       date: this.formatDate(request.fecha_uso),
       schedule: `${this.formatHour(request.hora_inicio)} - ${this.formatHour(request.hora_fin)}`,
-      purpose: request.motivo ?? 'Sin motivo indicado',
+      purpose: request.proposito ?? request.requerimientos ?? 'Sin motivo indicado',
       submittedDate: this.formatDate(request.created_at),
       faculty: usuario.facultad ?? request.centro?.nombre ?? 'Sin facultad',
     };

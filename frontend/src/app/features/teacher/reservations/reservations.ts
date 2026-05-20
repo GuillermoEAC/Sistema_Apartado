@@ -4,6 +4,7 @@ import { TeacherApiService } from '../../../core/services/teacher-api.service';
 
 interface ReservationView {
   id: string;
+  requestId?: string;
   type: 'solicitud' | 'reserva';
   title: string;
   details: string;
@@ -37,11 +38,14 @@ export class Reservations implements OnInit {
 
     this.teacherApi.getMyRequests().subscribe({
       next: (requests) => {
-        const requestItems = requests.data.map((request) => this.mapRequest(request));
-
         this.teacherApi.getMyReservations().subscribe({
           next: (reservations) => {
             const reservationItems = reservations.data.map((reservation) => this.mapReservation(reservation));
+            const reservedRequestIds = new Set(reservationItems.map((reservation) => reservation.requestId));
+            const requestItems = requests.data
+              .filter((request) => !reservedRequestIds.has(String(request.id_solicitud)))
+              .map((request) => this.mapRequest(request));
+
             this.items = [...requestItems, ...reservationItems];
             this.loading = false;
             this.cdr.detectChanges();
@@ -84,6 +88,7 @@ export class Reservations implements OnInit {
 
     return {
       id: String(reservation.id_reserva),
+      requestId: String(reservation.id_solicitud),
       type: 'reserva',
       title: solicitud.materia ?? 'Reserva',
       details: `${solicitud.grupo ?? 'Sin grupo'} · ${this.formatDate(reservation.fecha_uso)} · ${this.formatHour(reservation.hora_inicio)} a ${this.formatHour(reservation.hora_fin)}`,

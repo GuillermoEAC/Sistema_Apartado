@@ -19,25 +19,28 @@
 
 .layout-profesor {
     display: flex;
-    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100dvh;
     background: var(--bg-main);
     font-family: 'Inter', 'Roboto', sans-serif;
+    overflow: hidden;
 }
 
 /* 1. Fondo del Sidebar */
 .sidebar {
+    box-sizing: border-box;
     width: 280px;
     min-width: 280px;
-    height: 100vh;
+    height: 100dvh;
     background: var(--bg-sidebar);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     border-right: 1px solid rgba(37, 99, 235, 0.08);
     box-shadow: 10px 0 30px rgba(37, 99, 235, 0.08);
     position: sticky;
     top: 0;
     z-index: 10;
+    overflow: hidden;
 }
 
 .sidebar::before {
@@ -53,7 +56,7 @@
 
 /* 2. Encabezado Superior */
 .sidebar-header {
-    padding: 24px 24px 18px;
+    padding: 20px 22px 16px;
     display: flex;
     align-items: center;
     gap: 16px;
@@ -138,20 +141,20 @@
 /* Cuerpo de navegación */
 .sidebar-body {
     flex: 1;
-    padding: 24px 18px;
+    min-height: 0;
+    padding: 18px 18px;
     overflow-y: auto;
 }
 
 .sidebar-footer {
-    padding: 20px 18px 22px;
-    margin-top: auto;
+    padding: 14px 18px 18px;
     flex-shrink: 0;
 }
 
 .menu {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .menu a {
@@ -162,7 +165,7 @@
     background: transparent;
     color: var(--text-regular);
     text-decoration: none;
-    padding: 14px 16px;
+    padding: 12px 16px;
     border-radius: 18px;
     font-size: 0.95rem;
     font-weight: 500;
@@ -226,22 +229,22 @@
 
 /* 6. Pie del Sidebar */
 .sidebar-footer {
-    padding: 20px 18px 24px;
-    margin-top: auto;
+    padding: 14px 18px 18px;
+    margin-top: 0;
 }
 
 .user-profile {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 16px;
+    padding: 12px;
     border-radius: 20px;
     background: rgba(255, 255, 255, 0.58);
     border: 1px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 8px 18px rgba(37, 99, 235, 0.08);
     transition: all 0.22s ease;
     cursor: pointer;
-    min-height: 68px;
+    min-height: 60px;
 }
 
 .user-profile:hover {
@@ -310,9 +313,11 @@
 /* Topbar Master */
 .layout-profesor {
     display: flex;
-    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100dvh;
     background: var(--bg-main);
     font-family: 'Inter', 'Roboto', sans-serif;
+    overflow: hidden;
 }
 
 .panel-principal {
@@ -320,8 +325,9 @@
     display: flex;
     flex-direction: column;
     background: transparent;
-    overflow-y: auto;
-    height: 100vh;
+    min-width: 0;
+    overflow: hidden;
+    height: 100dvh;
 }
 
 .topbar {
@@ -364,4 +370,79 @@
     box-shadow:
         0 12px 30px rgba(37, 99, 235, 0.08),
         0 24px 60px rgba(79, 70, 229, 0.08);
+    overflow: auto;
+    min-height: 0;
+}
+
+@media (max-height: 760px) {
+    .sidebar-header {
+        padding: 14px 18px 12px;
+    }
+
+    .logo-box {
+        width: 40px;
+        height: 40px;
+    }
+
+    .system-title h2 {
+        font-size: 1.15rem;
+    }
+
+    .badge-role {
+        margin-top: 4px;
+        padding: 3px 8px;
+        font-size: 0.74rem;
+    }
+
+    .sidebar-body {
+        padding: 12px 16px;
+    }
+
+    .menu {
+        gap: 6px;
+    }
+
+    .menu a {
+        padding: 9px 12px;
+        border-radius: 14px;
+    }
+
+    .sidebar-footer {
+        padding: 10px 16px 12px;
+    }
+
+    .user-profile {
+        padding: 10px;
+        min-height: 54px;
+    }
+
+    .avatar {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+@media (max-width: 760px) {
+    .layout-profesor {
+        flex-direction: column;
+        height: auto;
+        min-height: 100dvh;
+        overflow: visible;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        position: relative;
+    }
+
+    .sidebar-body {
+        max-height: none;
+    }
+
+    .panel-principal {
+        height: auto;
+        overflow: visible;
+    }
 }

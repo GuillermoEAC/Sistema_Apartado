@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AdminApiService } from '../../../core/services/admin-api.service';
 
@@ -27,7 +27,10 @@ export class Users implements OnInit {
 
   users: User[] = [];
 
-  constructor(private readonly adminApi: AdminApiService) {}
+  constructor(
+    private readonly adminApi: AdminApiService,
+    private readonly cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.loadUsers();
@@ -39,10 +42,13 @@ export class Users implements OnInit {
       next: (response) => {
         this.users = response.data.map((user) => this.mapUser(user));
         this.loading = false;
+        this.error = '';
+        this.cdr.detectChanges();
       },
       error: () => {
         this.error = 'No se pudieron cargar los usuarios.';
         this.loading = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -62,9 +68,12 @@ export class Users implements OnInit {
         this.users = this.users.map((user) =>
           user.id === id ? { ...user, active: !user.active } : user
         );
+        this.error = '';
+        this.cdr.detectChanges();
       },
       error: () => {
         this.error = 'No se pudo cambiar el estado del usuario.';
+        this.cdr.detectChanges();
       },
     });
   }
@@ -78,9 +87,12 @@ export class Users implements OnInit {
       this.adminApi.deleteUser(id).subscribe({
         next: () => {
           this.users = this.users.filter((user) => user.id !== id);
+          this.error = '';
+          this.cdr.detectChanges();
         },
         error: () => {
           this.error = 'No se pudo desactivar el usuario.';
+          this.cdr.detectChanges();
         },
       });
     }

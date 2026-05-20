@@ -1,19 +1,24 @@
 .layout-admin {
     display: flex;
-    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100dvh;
     background: #f8fafc;
+    overflow: hidden;
 }
 
 .sidebar {
+    box-sizing: border-box;
     width: 260px;
+    min-width: 260px;
     background: #111827;
     color: white;
-    padding: 24px 16px;
+    padding: 20px 16px;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100dvh;
     position: sticky;
     top: 0;
+    overflow: hidden;
 }
 
 .logo h2 {
@@ -21,15 +26,18 @@
 }
 
 .logo p {
-    margin: 4px 0 24px;
+    margin: 4px 0 18px;
     color: #cbd5e1;
 }
 
 .menu {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 2px;
 }
 
 .menu a {
@@ -50,12 +58,14 @@
 }
 
 .sidebar-footer {
-    margin-top: auto;
-    padding-top: 20px;
+    margin-top: 16px;
+    padding-top: 14px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     gap: 12px;
+    flex-shrink: 0;
+    min-height: 48px;
 }
 
 .admin-user {
@@ -85,7 +95,7 @@
     border: 1px solid rgba(239, 68, 68, 0.4);
     background: rgba(239, 68, 68, 0.12);
     color: #fca5a5;
-    padding: 6px 14px;
+    padding: 6px 12px;
     border-radius: 8px;
     font-size: 0.82rem;
     font-weight: 600;
@@ -103,6 +113,9 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    height: 100dvh;
+    overflow: hidden;
 }
 
 .topbar {
@@ -118,4 +131,68 @@
 
 .contenido {
     padding: 24px;
+    overflow: auto;
+    min-height: 0;
+}
+
+@media (max-height: 760px) {
+    .sidebar {
+        padding: 14px 16px;
+    }
+
+    .logo p {
+        margin-bottom: 12px;
+    }
+
+    .menu {
+        gap: 6px;
+    }
+
+    .menu a {
+        padding: 8px 12px;
+    }
+
+    .sidebar-footer {
+        margin-top: 10px;
+        padding-top: 10px;
+        min-height: 42px;
+    }
+
+    .admin-name {
+        font-size: 0.84rem;
+    }
+
+    .admin-email {
+        font-size: 0.72rem;
+    }
+
+    .btn-logout {
+        padding: 5px 10px;
+        font-size: 0.76rem;
+    }
+}
+
+@media (max-width: 760px) {
+    .layout-admin {
+        flex-direction: column;
+        height: auto;
+        min-height: 100dvh;
+        overflow: visible;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        position: relative;
+    }
+
+    .menu {
+        max-height: none;
+    }
+
+    .panel-principal {
+        height: auto;
+        overflow: visible;
+    }
 }

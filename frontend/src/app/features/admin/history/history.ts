@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AdminApiService } from '../../../core/services/admin-api.service';
 
 interface HistoryItem {
@@ -20,7 +20,10 @@ export class History implements OnInit {
   loading = true;
   error = '';
 
-  constructor(private readonly adminApi: AdminApiService) {}
+  constructor(
+    private readonly adminApi: AdminApiService,
+    private readonly cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.adminApi.getHistory().subscribe({
@@ -32,10 +35,13 @@ export class History implements OnInit {
           detail: item.detalle ?? `ID relacionado: ${item.id_entidad}`,
         }));
         this.loading = false;
+        this.error = '';
+        this.cdr.detectChanges();
       },
       error: () => {
         this.error = 'No se pudo cargar el historial.';
         this.loading = false;
+        this.cdr.detectChanges();
       },
     });
   }
