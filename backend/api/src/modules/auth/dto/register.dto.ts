@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsOptional, IsString, MinLength, Matches, IsNotEmpty } from 'class-validator';
 
 export class RegisterDto {
     @IsString()
@@ -13,7 +13,12 @@ export class RegisterDto {
     @IsString()
     apellido2?: string;
 
-    @IsEmail()
+    @IsNotEmpty({ message: 'El correo es requerido' })
+    @IsEmail({}, { message: 'El formato del correo no es válido' })
+    // 2. AGREGA ESTA REGLA EXACTA PARA EL DOMINIO DE LA UAS:
+    @Matches(/^[a-zA-Z0-9._%+-]+@(ms\.uas\.edu\.mx|uas\.edu\.mx)$/i, {
+        message: 'Registro denegado: Solo se permiten correos institucionales (@ms.uas.edu.mx o @uas.edu.mx)',
+    })
     correo: string;
 
     @IsString()

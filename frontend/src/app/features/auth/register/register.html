@@ -23,6 +23,11 @@
                 <div class="campo">
                     <label for="correo">Correo institucional</label>
                     <input id="correo" type="email" formControlName="correo" placeholder="nombre@uas.edu.mx" />
+
+                    <p *ngIf="form.get('correo')?.hasError('dominioInvalido') && form.get('correo')?.touched"
+                        class="mensaje mensaje-error" style="font-size: 0.85rem; margin-top: 5px; padding: 5px;">
+                        Solo se permiten correos @ms.uas.edu.mx o @uas.edu.mx
+                    </p>
                 </div>
 
                 <div class="campo">
