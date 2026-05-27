@@ -9,6 +9,12 @@
             <h3>Datos del solicitante</h3>
 
             <div class="grid-formulario">
+                <div class="campo campo-completo">
+                    <label for="facultad">Facultad o Unidad Académica</label>
+                    <input id="facultad" name="facultad" type="text" readonly [(ngModel)]="formData.facultad"
+                        style="background-color: #f0f0f0; cursor: not-allowed; color: #666;" />
+                </div>
+
                 <div class="campo">
                     <label for="centro">Centro de cómputo</label>
                     <select id="centro" name="id_centro" required [(ngModel)]="formData.id_centro">
@@ -19,15 +25,21 @@
                 </div>
 
                 <div class="campo">
+                    <label for="carrera">Carrera</label>
+                    <input id="carrera" name="carrera" type="text" required [(ngModel)]="formData.carrera"
+                        placeholder="Ej. Ing. de Software" />
+                </div>
+
+                <div class="campo">
                     <label for="materia">Materia</label>
                     <input id="materia" name="materia" type="text" required [(ngModel)]="formData.materia"
                         placeholder="Ej. Programación I" />
                 </div>
 
                 <div class="campo">
-                    <label for="grupo">Grupo o carrera</label>
+                    <label for="grupo">Grupo</label>
                     <input id="grupo" name="grupo" type="text" required [(ngModel)]="formData.grupo"
-                        placeholder="Ej. Sistemas 4A" />
+                        placeholder="Ej. 3-1" />
                 </div>
 
                 <div class="campo">
@@ -42,16 +54,33 @@
             <h3>Información de uso</h3>
 
             <div class="grid-formulario">
+                <div class="campo">
+                    <label for="tipo_uso">Tipo de uso</label>
+                    <select id="tipo_uso" name="tipo_uso" required [(ngModel)]="formData.tipo_uso">
+                        <option value="" disabled selected>Selecciona una opción</option>
+                        <option value="Clase">Clase</option>
+                        <option value="Curso">Curso</option>
+                        <option value="Reunión">Reunión</option>
+                    </select>
+                </div>
+
                 <div class="campo campo-completo">
                     <label for="motivo">Motivo de uso</label>
-                    <textarea id="motivo" name="proposito" rows="4" [(ngModel)]="formData.proposito"
+                    <textarea id="motivo" name="proposito" rows="4" required [(ngModel)]="formData.proposito"
                         placeholder="Describe el motivo de la solicitud"></textarea>
                 </div>
 
                 <div class="campo campo-completo">
                     <label for="software-requerido">Software requerido</label>
                     <input id="software-requerido" name="software_requerido" type="text"
-                        [(ngModel)]="formData.software_requerido" placeholder="Ej. Visual Studio Code, MySQL Workbench" />
+                        [(ngModel)]="formData.software_requerido"
+                        placeholder="Ej. Visual Studio Code, MySQL Workbench" />
+
+                    <small style="display: block; margin-top: 5px; color: #555; font-size: 0.85rem; line-height: 1.4;">
+                        <strong>Nota:</strong> Los equipos ya cuentan con paquetería de Office instalada. En caso de
+                        requerir un software específico, deberá mencionarlo aquí y solicitarlo con anticipación de
+                        manera directa en este departamento para estar en condiciones de contar con él.
+                    </small>
                 </div>
             </div>
         </section>
@@ -63,13 +92,19 @@
                 <label><input type="checkbox" name="internet" [(ngModel)]="formData.internet" /> Internet</label>
                 <label><input type="checkbox" name="equipo" [(ngModel)]="formData.equipo" /> Equipo de cómputo</label>
                 <label><input type="checkbox" name="proyector" [(ngModel)]="formData.proyector" /> Proyector</label>
-                <label><input type="checkbox" name="software" [(ngModel)]="formData.software" /> Software especializado</label>
+                <label><input type="checkbox" name="software" [(ngModel)]="formData.software" /> Software
+                    especializado</label>
             </div>
         </section>
 
         <section class="bloque">
-            <div class="tabla-header">
+            <div class="tabla-header"
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                 <h3>Fechas y horarios</h3>
+                <button type="button" (click)="agregarFecha()"
+                    style="background: transparent; color: #0056b3; border: 1px dashed #0056b3; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">
+                    + Agregar otra fecha
+                </button>
             </div>
 
             <div class="tabla-horarios">
@@ -77,12 +112,20 @@
                     <span>Fecha</span>
                     <span>Hora inicio</span>
                     <span>Hora fin</span>
+                    <span>Acciones</span>
                 </div>
 
-                <div class="fila">
-                    <input type="date" name="fecha_uso" required [(ngModel)]="formData.fecha_uso" />
-                    <input type="time" name="hora_inicio" required [(ngModel)]="formData.hora_inicio" />
-                    <input type="time" name="hora_fin" required [(ngModel)]="formData.hora_fin" />
+                <div class="fila" *ngFor="let item of formData.fechas; let i = index">
+                    <input type="date" [name]="'fecha_uso_' + i" required [(ngModel)]="item.fecha_uso" />
+                    <input type="time" [name]="'hora_inicio_' + i" required [(ngModel)]="item.hora_inicio" />
+                    <input type="time" [name]="'hora_fin_' + i" required [(ngModel)]="item.hora_fin" />
+
+                    <button type="button" *ngIf="formData.fechas.length > 1" (click)="removerFecha(i)"
+                        title="Eliminar fecha"
+                        style="background: #dc3545; color: white; border: none; border-radius: 4px; padding: 0 10px; cursor: pointer; font-weight: bold;">
+                        X
+                    </button>
+                    <span *ngIf="formData.fechas.length === 1"></span>
                 </div>
             </div>
         </section>

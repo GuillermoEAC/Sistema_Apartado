@@ -33,6 +33,7 @@ export interface RegisterPayload {
   apellido2?: string;
   correo: string;
   password: string;
+  facultad: string;
 }
 
 @Injectable({ providedIn: 'root' })

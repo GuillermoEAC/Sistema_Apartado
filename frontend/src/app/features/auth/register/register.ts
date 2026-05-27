@@ -50,7 +50,9 @@ export class RegisterComponent {
       return;
     }
 
-    const { nombreCompleto, correo, password, confirmar } = this.form.getRawValue();
+    // 1. AGREGAMOS "facultad" A LA EXTRACCIÓN DE DATOS
+    const { nombreCompleto, correo, password, confirmar, facultad } = this.form.getRawValue();
+
     if (password !== confirmar) {
       this.errorMessage = 'Las contraseñas no coinciden.';
       return;
@@ -64,6 +66,8 @@ export class RegisterComponent {
         ...nombrePartes,
         correo: correo ?? '',
         password: password ?? '',
+        // 2. MANDAMOS LA FACULTAD AL BACKEND
+        facultad: facultad ?? '',
       })
       .subscribe({
         next: () => {
@@ -73,7 +77,6 @@ export class RegisterComponent {
         error: (err) => {
           this.isSubmitting = false;
 
-          // 3. EXTRAEMOS EL MENSAJE REAL DE NESTJS (INCLUSO SI ES UN ARREGLO)
           let mensajeExacto = 'No se pudo crear la cuenta. Intenta de nuevo.';
           if (err.error && err.error.message) {
             mensajeExacto = Array.isArray(err.error.message)
