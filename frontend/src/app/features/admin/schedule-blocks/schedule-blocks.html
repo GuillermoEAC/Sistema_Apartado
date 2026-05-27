@@ -81,7 +81,7 @@
             </div>
 
             <div *ngIf="blockedSchedules.length > 0" class="space-y-3 max-h-[600px] overflow-y-auto">
-                <div *ngFor="let block of blockedSchedules" class="border border-red-200 bg-red-50 rounded-lg p-4">
+                <div *ngFor="let block of blockedSchedules; trackBy: trackByBlockId" class="border border-red-200 bg-red-50 rounded-lg p-4">
                     <div class="flex items-start justify-between mb-2">
                         <div class="flex-1">
                             <p class="font-medium text-gray-900 mb-1">

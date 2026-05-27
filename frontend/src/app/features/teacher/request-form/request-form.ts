@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CreateSolicitudPayload, TeacherApiService } from '../../../core/services/teacher-api.service';
 
@@ -9,6 +9,7 @@ import { CreateSolicitudPayload, TeacherApiService } from '../../../core/service
   imports: [CommonModule, FormsModule],
   templateUrl: './request-form.html',
   styleUrl: './request-form.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestFormComponent implements OnInit {
   centers: any[] = [];
@@ -152,5 +153,13 @@ export class RequestFormComponent implements OnInit {
       proyector: false,
       software: false,
     };
+  }
+
+  trackByCenterId(index: number, center: any): number {
+    return center.id_centro;
+  }
+
+  trackByIndex(index: number): number {
+    return index;
   }
 }

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { TeacherApiService } from '../../../core/services/teacher-api.service';
 
 interface ReservationView {
@@ -17,6 +18,7 @@ interface ReservationView {
   imports: [CommonModule],
   templateUrl: './reservations.html',
   styleUrl: './reservations.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Reservations implements OnInit {
   items: ReservationView[] = [];
@@ -36,22 +38,20 @@ export class Reservations implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.teacherApi.getMyRequests().subscribe({
-      next: (requests) => {
-        this.teacherApi.getMyReservations().subscribe({
-          next: (reservations) => {
-            const reservationItems = reservations.data.map((reservation) => this.mapReservation(reservation));
-            const reservedRequestIds = new Set(reservationItems.map((reservation) => reservation.requestId));
-            const requestItems = requests.data
-              .filter((request) => !reservedRequestIds.has(String(request.id_solicitud)))
-              .map((request) => this.mapRequest(request));
+    forkJoin([
+      this.teacherApi.getMyRequests(),
+      this.teacherApi.getMyReservations(),
+    ]).subscribe({
+      next: ([requests, reservations]) => {
+        const reservationItems = reservations.data.map((reservation: any) => this.mapReservation(reservation));
+        const reservedRequestIds = new Set(reservationItems.map((reservation) => reservation.requestId));
+        const requestItems = requests.data
+          .filter((request: any) => !reservedRequestIds.has(String(request.id_solicitud)))
+          .map((request: any) => this.mapRequest(request));
 
-            this.items = [...requestItems, ...reservationItems];
-            this.loading = false;
-            this.cdr.detectChanges();
-          },
-          error: () => this.failLoad(),
-        });
+        this.items = [...requestItems, ...reservationItems];
+        this.loading = false;
+        this.cdr.detectChanges();
       },
       error: () => this.failLoad(),
     });
@@ -113,5 +113,9 @@ export class Reservations implements OnInit {
 
   private formatHour(value: string): string {
     return value?.slice(0, 5) ?? '--:--';
+  }
+
+  trackByFn(index: number, item: ReservationView): string {
+    return item.type + '-' + item.id;
   }
 }

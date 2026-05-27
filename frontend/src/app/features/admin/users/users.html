@@ -20,6 +20,7 @@
     <div class="mb-6">
         <div class="relative">
             <input type="text" placeholder="Buscar por nombre, correo o facultad..." [(ngModel)]="searchTerm"
+                (ngModelChange)="applyFilter()"
                 class="w-full pl-4 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
         </div>
     </div>
@@ -60,7 +61,7 @@
                 </thead>
 
                 <tbody class="divide-y divide-gray-200">
-                    <tr *ngFor="let user of filteredUsers" class="hover:bg-gray-50 transition-colors">
+                    <tr *ngFor="let user of filteredUsers; trackBy: trackByUserId" class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4">
                             <div>
                                 <p class="font-medium text-gray-900">

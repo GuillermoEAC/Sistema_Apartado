@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -8,6 +8,7 @@ import { AuthService } from '../../../core/services/auth.service';
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminLayout {
   private readonly authService = inject(AuthService);

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AdminApiService } from '../../../core/services/admin-api.service';
 
 interface HistoryItem {
@@ -14,6 +14,7 @@ interface HistoryItem {
   imports: [CommonModule],
   templateUrl: './history.html',
   styleUrl: './history.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class History implements OnInit {
   items: HistoryItem[] = [];
@@ -52,5 +53,9 @@ export class History implements OnInit {
       dateStyle: 'medium',
       timeStyle: 'short',
     });
+  }
+
+  trackByIndex(index: number): number {
+    return index;
   }
 }

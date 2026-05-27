@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AdminApiService } from '../../../core/services/admin-api.service';
 
 interface Request {
@@ -21,6 +21,7 @@ interface Request {
   imports: [CommonModule],
   templateUrl: './requests.html',
   styleUrl: './requests.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Requests implements OnInit {
   requests: Request[] = [];
@@ -128,5 +129,9 @@ export class Requests implements OnInit {
 
   private formatHour(value: string): string {
     return value?.slice(0, 5) ?? '--:--';
+  }
+
+  trackByRequestId(index: number, request: Request): string {
+    return request.id;
   }
 }

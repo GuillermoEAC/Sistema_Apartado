@@ -15,7 +15,7 @@
             <span>Detalle</span>
         </div>
 
-        <div *ngFor="let item of items" class="fila">
+        <div *ngFor="let item of items; trackBy: trackByIndex" class="fila">
             <span>{{ item.action }}</span>
             <span>{{ item.entity }}</span>
             <span>{{ item.date }}</span>

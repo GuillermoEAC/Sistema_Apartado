@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
@@ -21,11 +21,13 @@ export function uasEmailValidator(): ValidatorFn {
   imports: [RouterLink, ReactiveFormsModule, NgIf],
   templateUrl: './register.html',
   styleUrl: './register.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   errorMessage = '';
   successMessage = '';
@@ -47,6 +49,7 @@ export class RegisterComponent {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.errorMessage = 'Completa todos los campos correctamente.';
+      this.cdr.detectChanges();
       return;
     }
 
@@ -55,11 +58,13 @@ export class RegisterComponent {
 
     if (password !== confirmar) {
       this.errorMessage = 'Las contraseñas no coinciden.';
+      this.cdr.detectChanges();
       return;
     }
 
     const nombrePartes = this.splitNombre(nombreCompleto ?? '');
     this.isSubmitting = true;
+    this.cdr.detectChanges();
 
     this.authService
       .register({
@@ -72,6 +77,7 @@ export class RegisterComponent {
       .subscribe({
         next: () => {
           this.successMessage = 'Cuenta creada correctamente.';
+          this.cdr.detectChanges();
           this.router.navigateByUrl('/app/dashboard');
         },
         error: (err) => {
@@ -85,6 +91,7 @@ export class RegisterComponent {
           }
 
           this.errorMessage = mensajeExacto;
+          this.cdr.detectChanges();
         },
       });
   }

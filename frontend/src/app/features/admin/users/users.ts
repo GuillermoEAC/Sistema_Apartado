@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AdminApiService } from '../../../core/services/admin-api.service';
 
@@ -19,6 +19,7 @@ interface User {
   imports: [CommonModule, FormsModule],
   templateUrl: './users.html',
   styleUrl: './users.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Users implements OnInit {
   searchTerm = '';
@@ -26,6 +27,7 @@ export class Users implements OnInit {
   error = '';
 
   users: User[] = [];
+  filteredUsers: User[] = [];
 
   constructor(
     private readonly adminApi: AdminApiService,
@@ -41,6 +43,7 @@ export class Users implements OnInit {
     this.adminApi.getUsers().subscribe({
       next: (response) => {
         this.users = response.data.map((user) => this.mapUser(user));
+        this.applyFilter();
         this.loading = false;
         this.error = '';
         this.cdr.detectChanges();
@@ -53,21 +56,26 @@ export class Users implements OnInit {
     });
   }
 
-  get filteredUsers(): User[] {
-    return this.users.filter(
-      (user) =>
-        user.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        user.faculty.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
+  applyFilter(): void {
+    const term = this.searchTerm.toLowerCase();
+    this.filteredUsers = term
+      ? this.users.filter(
+          (user) =>
+            user.name.toLowerCase().includes(term) ||
+            user.email.toLowerCase().includes(term) ||
+            user.faculty.toLowerCase().includes(term)
+        )
+      : [...this.users];
+    this.cdr.detectChanges();
   }
 
   toggleUserStatus(id: string): void {
     this.adminApi.toggleUser(id).subscribe({
       next: () => {
-        this.users = this.users.map((user) =>
-          user.id === id ? { ...user, active: !user.active } : user
+        this.users = this.users.map((u) =>
+          u.id === id ? { ...u, active: !u.active } : u
         );
+        this.applyFilter();
         this.error = '';
         this.cdr.detectChanges();
       },
@@ -86,7 +94,8 @@ export class Users implements OnInit {
     if (confirmDelete) {
       this.adminApi.deleteUser(id).subscribe({
         next: () => {
-          this.users = this.users.filter((user) => user.id !== id);
+          this.users = this.users.filter((u) => u.id !== id);
+          this.applyFilter();
           this.error = '';
           this.cdr.detectChanges();
         },
@@ -124,5 +133,9 @@ export class Users implements OnInit {
       year: 'numeric',
       month: 'short',
     });
+  }
+
+  trackByUserId(index: number, user: User): string {
+    return user.id;
   }
 }

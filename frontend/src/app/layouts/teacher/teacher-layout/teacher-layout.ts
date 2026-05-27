@@ -1,20 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router'; // <-- 1. Importamos Router para redireccionar
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-teacher-layout', // Deja el selector que ya tengas
+  selector: 'app-teacher-layout',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './teacher-layout.html',
-  styleUrl: './teacher-layout.scss' // (o styleUrls dependiendo tu versión)
+  styleUrl: './teacher-layout.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TeacherLayoutComponent implements OnInit {
 
-  // Aquí guardaremos todo el objeto del usuario
+  // Propiedad directa en vez de función user() — evita evaluación en cada CD cycle
   datosUsuario: any = null;
 
-  // 2. Inyectamos el router en el constructor
   constructor(private router: Router) { }
 
   ngOnInit(): void {
@@ -33,12 +33,6 @@ export class TeacherLayoutComponent implements OnInit {
     }
   }
 
-  // 3. FIX ERROR 1: El HTML llama a user() como función
-  user() {
-    return this.datosUsuario;
-  }
-
-  // 4. FIX ERROR 2: El HTML busca la función logout() al hacer clic
   logout() {
     if (typeof localStorage === 'undefined') {
       return;

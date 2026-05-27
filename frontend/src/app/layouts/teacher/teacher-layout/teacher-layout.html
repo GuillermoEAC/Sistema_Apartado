@@ -71,10 +71,10 @@
         <!-- 6. Parte inferior -->
         <div class="sidebar-footer">
             <div class="user-profile">
-                <div class="avatar">{{ user()?.nombre?.charAt(0) ?? 'P' }}</div>
+                <div class="avatar">{{ datosUsuario?.nombre?.charAt(0) ?? 'P' }}</div>
                 <div class="user-info">
-                    <span class="user-name">{{ user()?.nombre ?? 'Docente' }}</span>
-                    <span class="user-email">{{ user()?.correo ?? 'Sesión activa' }}</span>
+                    <span class="user-name">{{ datosUsuario?.nombre ?? 'Docente' }}</span>
+                    <span class="user-email">{{ datosUsuario?.correo ?? 'Sesión activa' }}</span>
                 </div>
             </div>
             <button class="btn-logout" (click)="logout()" title="Cerrar sesión">

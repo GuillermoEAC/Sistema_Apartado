@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AdminApiService } from '../../../core/services/admin-api.service';
 
@@ -18,6 +18,7 @@ interface BlockedSchedule {
   imports: [CommonModule, FormsModule],
   templateUrl: './schedule-blocks.html',
   styleUrl: './schedule-blocks.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScheduleBlocks implements OnInit {
 
@@ -139,5 +140,9 @@ export class ScheduleBlocks implements OnInit {
       endTime: '',
       reason: '',
     };
+  }
+
+  trackByBlockId(index: number, block: BlockedSchedule): string {
+    return block.id;
   }
 }

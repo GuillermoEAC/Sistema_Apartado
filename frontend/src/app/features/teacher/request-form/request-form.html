@@ -18,7 +18,7 @@
                 <div class="campo">
                     <label for="centro">Centro de cómputo</label>
                     <select id="centro" name="id_centro" required [(ngModel)]="formData.id_centro">
-                        <option *ngFor="let center of centers" [ngValue]="center.id_centro">
+                        <option *ngFor="let center of centers; trackBy: trackByCenterId" [ngValue]="center.id_centro">
                             {{ center.nombre }}
                         </option>
                     </select>
@@ -115,7 +115,7 @@
                     <span>Acciones</span>
                 </div>
 
-                <div class="fila" *ngFor="let item of formData.fechas; let i = index">
+                <div class="fila" *ngFor="let item of formData.fechas; let i = index; trackBy: trackByIndex">
                     <input type="date" [name]="'fecha_uso_' + i" required [(ngModel)]="item.fecha_uso" />
                     <input type="time" [name]="'hora_inicio_' + i" required [(ngModel)]="item.hora_inicio" />
                     <input type="time" [name]="'hora_fin_' + i" required [(ngModel)]="item.hora_fin" />
