@@ -9,10 +9,15 @@
             <h3>Datos del solicitante</h3>
 
             <div class="grid-formulario">
+                <div class="campo campo-completo">
+                    <label for="facultad">Facultad o unidad académica</label>
+                    <input id="facultad" name="facultad" type="text" readonly [(ngModel)]="formData.facultad" />
+                </div>
+
                 <div class="campo">
                     <label for="centro">Centro de cómputo</label>
                     <select id="centro" name="id_centro" required [(ngModel)]="formData.id_centro">
-                        <option *ngFor="let center of centers" [ngValue]="center.id_centro">
+                        <option *ngFor="let center of centers; trackBy: trackByCenterId" [ngValue]="center.id_centro">
                             {{ center.nombre }}
                         </option>
                     </select>

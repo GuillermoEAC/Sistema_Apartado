@@ -8,6 +8,7 @@ export interface AuthUser {
   nombre: string;
   correo: string;
   rol: 'profesor' | 'admin';
+  facultad?: string | null;
 }
 
 export interface AuthResponse {
@@ -33,6 +34,7 @@ export interface RegisterPayload {
   apellido2?: string;
   correo: string;
   password: string;
+  facultad: string;
 }
 
 @Injectable({ providedIn: 'root' })

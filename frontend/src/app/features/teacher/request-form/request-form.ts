@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { AuthService } from '../../../core/services/auth.service';
 import { CreateSolicitudPayload, TeacherApiService } from '../../../core/services/teacher-api.service';
 
 @Component({
@@ -21,10 +22,13 @@ export class RequestFormComponent implements OnInit {
 
   constructor(
     private readonly teacherApi: TeacherApiService,
+    private readonly authService: AuthService,
     private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
+    this.formData.facultad = this.currentFaculty();
+
     this.teacherApi.getCenters().subscribe({
       next: (centers) => {
         this.centers = centers;
@@ -67,7 +71,9 @@ export class RequestFormComponent implements OnInit {
       next: () => {
         this.saving = false;
         this.success = 'Solicitud enviada correctamente. Ahora aparecerá en pendientes para el administrador.';
+        const facultad = this.formData.facultad;
         this.formData = this.emptyForm(this.centers[0]?.id_centro ?? 1);
+        this.formData.facultad = facultad;
         form.resetForm(this.formData);
         this.cdr.detectChanges();
       },
@@ -90,9 +96,14 @@ export class RequestFormComponent implements OnInit {
     return entries.filter(([, selected]) => selected).map(([label]) => label as string);
   }
 
+  private currentFaculty(): string {
+    return this.authService.getCurrentUser()?.facultad?.trim() || 'Facultad no registrada';
+  }
+
   private emptyForm(id_centro = 1) {
     return {
       id_centro,
+      facultad: '',
       fecha_uso: '',
       hora_inicio: '',
       hora_fin: '',
@@ -106,5 +117,9 @@ export class RequestFormComponent implements OnInit {
       proyector: false,
       software: false,
     };
+  }
+
+  trackByCenterId(index: number, center: any): number {
+    return center.id_centro;
   }
 }

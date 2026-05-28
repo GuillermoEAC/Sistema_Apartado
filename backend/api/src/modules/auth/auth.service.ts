@@ -46,6 +46,7 @@ export class AuthService {
                 nombre: `${user.nombre} ${user.apellido1}`,
                 correo: user.correo,
                 rol: user.rol,
+                facultad: user.facultad,
             },
         };
     }

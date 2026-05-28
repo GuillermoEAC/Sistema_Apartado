@@ -27,8 +27,10 @@
 
                 <div class="campo">
                     <label for="facultad">Facultad o unidad académica</label>
-                    <input id="facultad" type="text" formControlName="facultad"
-                        placeholder="Ej. Facultad de Ingenieria" />
+                    <select id="facultad" formControlName="facultad">
+                        <option value="" disabled>Selecciona tu unidad académica</option>
+                        <option value="Facultad de Ingeniería Mochis">Facultad de Ingeniería Mochis</option>
+                    </select>
                 </div>
 
                 <div class="campo-grid">

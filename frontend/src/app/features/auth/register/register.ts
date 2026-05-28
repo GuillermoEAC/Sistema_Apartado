@@ -38,7 +38,7 @@ export class RegisterComponent {
       return;
     }
 
-    const { nombreCompleto, correo, password, confirmar } = this.form.getRawValue();
+    const { nombreCompleto, correo, facultad, password, confirmar } = this.form.getRawValue();
     if (password !== confirmar) {
       this.errorMessage = 'Las contraseñas no coinciden.';
       return;
@@ -52,6 +52,7 @@ export class RegisterComponent {
         ...nombrePartes,
         correo: correo ?? '',
         password: password ?? '',
+        facultad: facultad ?? '',
       })
       .subscribe({
         next: () => {
