@@ -107,6 +107,11 @@ export const routes: Routes = [
                     import('./features/admin/users/users').then((m) => m.Users),
             },
             {
+                path: 'catalogs',
+                loadComponent: () =>
+                    import('./features/admin/catalogs/catalogs').then((m) => m.Catalogs),
+            },
+            {
                 path: 'blocks',
                 loadComponent: () =>
                     import('./features/admin/schedule-blocks/schedule-blocks').then(

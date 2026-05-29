@@ -24,6 +24,7 @@ export class Users implements OnInit {
   searchTerm = '';
   loading = true;
   error = '';
+  success = '';
 
   users: User[] = [];
 
@@ -40,7 +41,7 @@ export class Users implements OnInit {
     this.loading = true;
     this.adminApi.getUsers().subscribe({
       next: (response) => {
-        this.users = response.data.map((user) => this.mapUser(user));
+        this.users = response.data.map((user) => this.mapUser(user)).filter((user) => user.active);
         this.loading = false;
         this.error = '';
         this.cdr.detectChanges();
@@ -80,13 +81,17 @@ export class Users implements OnInit {
 
   handleDeleteUser(id: string): void {
     const confirmDelete = confirm(
-      '¿Está seguro de eliminar este usuario?'
+      '¿Está seguro de eliminar este profesor? Sus solicitudes y reservas históricas se conservarán.'
     );
 
     if (confirmDelete) {
+      this.error = '';
+      this.success = '';
+
       this.adminApi.deleteUser(id).subscribe({
         next: () => {
           this.users = this.users.filter((user) => user.id !== id);
+          this.success = 'Usuario eliminado correctamente.';
           this.error = '';
           this.cdr.detectChanges();
         },

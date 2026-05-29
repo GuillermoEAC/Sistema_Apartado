@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsOptional, IsString, Matches, MinLength } from 'class-validator';
 
 export class RegisterDto {
     @IsString()
@@ -14,6 +14,9 @@ export class RegisterDto {
     apellido2?: string;
 
     @IsEmail()
+    @Matches(/^[a-zA-Z0-9._%+-]+@uas\.edu\.mx$/i, {
+        message: 'Solo se permiten correos escolares @uas.edu.mx',
+    })
     correo: string;
 
     @IsString()

@@ -16,6 +16,20 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
+export interface CentroComputo {
+  id_centro: number;
+  nombre: string;
+  capacidad: number;
+  descripcion?: string;
+  activo: boolean;
+}
+
+export interface Facultad {
+  id_facultad: number;
+  nombre: string;
+  activo: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AdminApiService {
   private readonly apiUrl = 'http://localhost:3000/api/v1';
@@ -54,7 +68,7 @@ export class AdminApiService {
     return this.get<any[]>('bloqueos');
   }
 
-  createBlock(payload: { date: string; startTime: string; endTime: string; reason: string }) {
+  createBlock(payload: { id_centro: number; date: string; startTime: string; endTime: string; reason: string }) {
     return this.post<any>('bloqueos', payload);
   }
 
@@ -68,6 +82,38 @@ export class AdminApiService {
 
   getHistory() {
     return this.get<PaginatedResponse<any>>('historial', { limit: 100 });
+  }
+
+  getCentersAdmin() {
+    return this.get<CentroComputo[]>('centros/admin');
+  }
+
+  createCenter(payload: { nombre: string; capacidad: number; descripcion?: string; activo?: boolean }) {
+    return this.post<CentroComputo>('centros', payload);
+  }
+
+  updateCenter(id: number, payload: { nombre?: string; capacidad?: number; descripcion?: string; activo?: boolean }) {
+    return this.patch<CentroComputo>(`centros/${id}`, payload);
+  }
+
+  toggleCenter(id: number) {
+    return this.patch<CentroComputo>(`centros/${id}/toggle-active`, {});
+  }
+
+  getFacultiesAdmin() {
+    return this.get<Facultad[]>('facultades/admin');
+  }
+
+  createFaculty(payload: { nombre: string; activo?: boolean }) {
+    return this.post<Facultad>('facultades', payload);
+  }
+
+  updateFaculty(id: number, payload: { nombre?: string; activo?: boolean }) {
+    return this.patch<Facultad>(`facultades/${id}`, payload);
+  }
+
+  toggleFaculty(id: number) {
+    return this.patch<Facultad>(`facultades/${id}/toggle-active`, {});
   }
 
   private get<T>(path: string, params?: Record<string, string | number | undefined>) {

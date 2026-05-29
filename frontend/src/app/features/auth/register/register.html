@@ -29,7 +29,9 @@
                     <label for="facultad">Facultad o unidad académica</label>
                     <select id="facultad" formControlName="facultad">
                         <option value="" disabled>Selecciona tu unidad académica</option>
-                        <option value="Facultad de Ingeniería Mochis">Facultad de Ingeniería Mochis</option>
+                        <option *ngFor="let facultad of facultades" [value]="facultad.nombre">
+                            {{ facultad.nombre }}
+                        </option>
                     </select>
                 </div>
 

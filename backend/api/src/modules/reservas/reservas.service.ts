@@ -133,14 +133,13 @@ export class ReservasService {
             })
             .getOne();
 
-        const fechaInicio = `${dto.fecha} ${horaInicio}`;
-        const fechaFin = `${dto.fecha} ${horaFin}`;
         const bloqueo = await this.bloqueoRepo
             .createQueryBuilder('b')
             .where('b.id_centro = :idCentro', { idCentro: dto.id_centro })
-            .andWhere('b.fecha_inicio < :fechaFin AND b.fecha_fin > :fechaInicio', {
-                fechaInicio,
-                fechaFin,
+            .andWhere('DATE(b.fecha_inicio) = :fecha', { fecha: dto.fecha })
+            .andWhere('TIME(b.fecha_inicio) < :horaFin AND TIME(b.fecha_fin) > :horaInicio', {
+                horaInicio,
+                horaFin,
             })
             .getOne();
 

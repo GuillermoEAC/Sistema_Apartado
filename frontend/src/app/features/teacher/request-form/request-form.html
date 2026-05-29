@@ -30,9 +30,15 @@
                 </div>
 
                 <div class="campo">
-                    <label for="grupo">Grupo o carrera</label>
+                    <label for="carrera">Carrera</label>
+                    <input id="carrera" name="carrera" type="text" required [(ngModel)]="formData.carrera"
+                        placeholder="Ej. Ingeniería de Software" />
+                </div>
+
+                <div class="campo">
+                    <label for="grupo">Grupo</label>
                     <input id="grupo" name="grupo" type="text" required [(ngModel)]="formData.grupo"
-                        placeholder="Ej. Sistemas 4A" />
+                        placeholder="Ej. 4A" />
                 </div>
 
                 <div class="campo">
@@ -47,9 +53,19 @@
             <h3>Información de uso</h3>
 
             <div class="grid-formulario">
+                <div class="campo">
+                    <label for="tipo_uso">Tipo de uso</label>
+                    <select id="tipo_uso" name="tipo_uso" required [(ngModel)]="formData.tipo_uso">
+                        <option value="" disabled>Selecciona una opción</option>
+                        <option value="Clase">Clase</option>
+                        <option value="Curso">Curso</option>
+                        <option value="Reunión">Reunión</option>
+                    </select>
+                </div>
+
                 <div class="campo campo-completo">
                     <label for="motivo">Motivo de uso</label>
-                    <textarea id="motivo" name="proposito" rows="4" [(ngModel)]="formData.proposito"
+                    <textarea id="motivo" name="proposito" rows="4" required [(ngModel)]="formData.proposito"
                         placeholder="Describe el motivo de la solicitud"></textarea>
                 </div>
 
@@ -57,6 +73,10 @@
                     <label for="software-requerido">Software requerido</label>
                     <input id="software-requerido" name="software_requerido" type="text"
                         [(ngModel)]="formData.software_requerido" placeholder="Ej. Visual Studio Code, MySQL Workbench" />
+                    <small class="field-note">
+                        Los equipos cuentan con paquetería de Office instalada. En caso de requerir software específico,
+                        deberá mencionarlo aquí y solicitarlo con anticipación directamente en este departamento.
+                    </small>
                 </div>
             </div>
         </section>
@@ -75,6 +95,9 @@
         <section class="bloque">
             <div class="tabla-header">
                 <h3>Fechas y horarios</h3>
+                <button type="button" class="boton-secundario" (click)="agregarFecha()">
+                    Agregar otra fecha
+                </button>
             </div>
 
             <div class="tabla-horarios">
@@ -82,12 +105,18 @@
                     <span>Fecha</span>
                     <span>Hora inicio</span>
                     <span>Hora fin</span>
+                    <span>Acciones</span>
                 </div>
 
-                <div class="fila">
-                    <input type="date" name="fecha_uso" required [(ngModel)]="formData.fecha_uso" />
-                    <input type="time" name="hora_inicio" required [(ngModel)]="formData.hora_inicio" />
-                    <input type="time" name="hora_fin" required [(ngModel)]="formData.hora_fin" />
+                <div class="fila" *ngFor="let fecha of formData.fechas; let i = index; trackBy: trackByIndex">
+                    <input type="date" [name]="'fecha_uso_' + i" required [(ngModel)]="fecha.fecha_uso" />
+                    <input type="time" [name]="'hora_inicio_' + i" required [(ngModel)]="fecha.hora_inicio" />
+                    <input type="time" [name]="'hora_fin_' + i" required [(ngModel)]="fecha.hora_fin" />
+                    <button type="button" class="boton-eliminar" *ngIf="formData.fechas.length > 1"
+                        (click)="removerFecha(i)">
+                        Quitar
+                    </button>
+                    <span *ngIf="formData.fechas.length === 1"></span>
                 </div>
             </div>
         </section>

@@ -97,9 +97,16 @@ export class UsersService {
     }
 
     async deactivate(id: number) {
-        await this.findById(id);
+        const user = await this.findById(id);
+        if (user.rol === UserRole.ADMIN) {
+            throw new BadRequestException('No se puede eliminar una cuenta administradora');
+        }
+
         await this.repo.update(id, { activo: false });
-        return { message: 'Usuario desactivado' };
+        return {
+            id_usuario: id,
+            message: 'Usuario eliminado correctamente',
+        };
     }
 
     async updatePassword(id: number, newPassword: string) {

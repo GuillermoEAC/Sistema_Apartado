@@ -64,15 +64,14 @@ export class SolicitudesService {
         // 6. Verificar conflicto con bloqueos de horario
         const horaInicio = dto.hora_inicio.length === 5 ? `${dto.hora_inicio}:00` : dto.hora_inicio;
         const horaFin = dto.hora_fin.length === 5 ? `${dto.hora_fin}:00` : dto.hora_fin;
-        const fechaInicio = `${dto.fecha_uso} ${horaInicio}`;
-        const fechaFin = `${dto.fecha_uso} ${horaFin}`;
 
         const bloqueo = await this.bloqueoRepo
             .createQueryBuilder('b')
             .where('b.id_centro = :c', { c: dto.id_centro })
-            .andWhere('b.fecha_inicio < :fin AND b.fecha_fin > :inicio', {
-                inicio: fechaInicio,
-                fin: fechaFin,
+            .andWhere('DATE(b.fecha_inicio) = :fecha', { fecha: dto.fecha_uso })
+            .andWhere('TIME(b.fecha_inicio) < :horaFin AND TIME(b.fecha_fin) > :horaInicio', {
+                horaInicio,
+                horaFin,
             })
             .getOne();
 
@@ -170,6 +169,22 @@ export class SolicitudesService {
             throw new BadRequestException(
                 'El horario ya fue reservado por otra solicitud. Rechaza esta solicitud.',
             );
+        }
+
+        const horaInicio = s.hora_inicio.length === 5 ? `${s.hora_inicio}:00` : s.hora_inicio;
+        const horaFin = s.hora_fin.length === 5 ? `${s.hora_fin}:00` : s.hora_fin;
+        const bloqueo = await this.bloqueoRepo
+            .createQueryBuilder('b')
+            .where('b.id_centro = :c', { c: s.id_centro })
+            .andWhere('DATE(b.fecha_inicio) = :fecha', { fecha: s.fecha_uso })
+            .andWhere('TIME(b.fecha_inicio) < :horaFin AND TIME(b.fecha_fin) > :horaInicio', {
+                horaInicio,
+                horaFin,
+            })
+            .getOne();
+
+        if (bloqueo) {
+            throw new BadRequestException(`El horario esta bloqueado: ${bloqueo.motivo}`);
         }
 
         await this.solicitudRepo.update(id, {

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { CreateSolicitudPayload, TeacherApiService } from '../../../core/services/teacher-api.service';
 
@@ -31,8 +32,8 @@ export class RequestFormComponent implements OnInit {
 
     this.teacherApi.getCenters().subscribe({
       next: (centers) => {
-        this.centers = centers;
-        this.formData.id_centro = centers[0]?.id_centro ?? 1;
+        this.centers = this.prioritizeMainCenter(centers);
+        this.formData.id_centro = this.centers[0]?.id_centro ?? 1;
         this.loadingCenters = false;
         this.cdr.detectChanges();
       },
@@ -54,23 +55,29 @@ export class RequestFormComponent implements OnInit {
     this.success = '';
     this.error = '';
 
-    const payload: CreateSolicitudPayload = {
-      id_centro: Number(this.formData.id_centro),
-      fecha_uso: this.formData.fecha_uso,
-      hora_inicio: this.formData.hora_inicio,
-      hora_fin: this.formData.hora_fin,
-      materia: this.formData.materia.trim(),
-      grupo: this.formData.grupo.trim(),
-      num_alumnos: Number(this.formData.num_alumnos),
-      proposito: this.formData.proposito.trim(),
-      software_requerido: this.formData.software_requerido.trim(),
-      requerimientos: this.selectedRequirements().join(', '),
-    };
+    const requests = this.formData.fechas.map((fecha) => {
+      const payload: CreateSolicitudPayload = {
+        id_centro: Number(this.formData.id_centro),
+        fecha_uso: fecha.fecha_uso,
+        hora_inicio: fecha.hora_inicio,
+        hora_fin: fecha.hora_fin,
+        materia: this.formData.materia.trim(),
+        grupo: this.buildGroup(),
+        num_alumnos: Number(this.formData.num_alumnos),
+        proposito: this.buildPurpose(),
+        software_requerido: this.formData.software_requerido.trim(),
+        requerimientos: this.selectedRequirements().join(', '),
+      };
 
-    this.teacherApi.createRequest(payload).subscribe({
+      return this.teacherApi.createRequest(payload);
+    });
+
+    forkJoin(requests).subscribe({
       next: () => {
         this.saving = false;
-        this.success = 'Solicitud enviada correctamente. Ahora aparecerá en pendientes para el administrador.';
+        this.success = requests.length > 1
+          ? 'Solicitudes enviadas correctamente. Ahora aparecerán en pendientes para el administrador.'
+          : 'Solicitud enviada correctamente. Ahora aparecerá en pendientes para el administrador.';
         const facultad = this.formData.facultad;
         this.formData = this.emptyForm(this.centers[0]?.id_centro ?? 1);
         this.formData.facultad = facultad;
@@ -100,14 +107,51 @@ export class RequestFormComponent implements OnInit {
     return this.authService.getCurrentUser()?.facultad?.trim() || 'Facultad no registrada';
   }
 
+  private prioritizeMainCenter(centers: any[]): any[] {
+    const mainCenterName = this.normalizeText('Sala de computo Torre Academica');
+    return [...centers].sort((a, b) => {
+      const aIsMain = this.normalizeText(a.nombre) === mainCenterName;
+      const bIsMain = this.normalizeText(b.nombre) === mainCenterName;
+      return Number(bIsMain) - Number(aIsMain);
+    });
+  }
+
+  private normalizeText(value?: string): string {
+    return (value ?? '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toLocaleLowerCase('es-MX');
+  }
+
+  private buildPurpose(): string {
+    const tipoUso = this.formData.tipo_uso ? `Tipo de uso: ${this.formData.tipo_uso}` : '';
+    const proposito = this.formData.proposito.trim();
+    return [tipoUso, proposito].filter(Boolean).join('\n\n');
+  }
+
+  private buildGroup(): string {
+    return [this.formData.carrera.trim(), this.formData.grupo.trim()].filter(Boolean).join(' - ');
+  }
+
+  agregarFecha(): void {
+    this.formData.fechas.push({ fecha_uso: '', hora_inicio: '', hora_fin: '' });
+  }
+
+  removerFecha(index: number): void {
+    if (this.formData.fechas.length > 1) {
+      this.formData.fechas.splice(index, 1);
+    }
+  }
+
   private emptyForm(id_centro = 1) {
     return {
       id_centro,
       facultad: '',
-      fecha_uso: '',
-      hora_inicio: '',
-      hora_fin: '',
+      tipo_uso: '',
+      fechas: [{ fecha_uso: '', hora_inicio: '', hora_fin: '' }],
       materia: '',
+      carrera: '',
       grupo: '',
       num_alumnos: 1,
       proposito: '',
@@ -121,5 +165,9 @@ export class RequestFormComponent implements OnInit {
 
   trackByCenterId(index: number, center: any): number {
     return center.id_centro;
+  }
+
+  trackByIndex(index: number): number {
+    return index;
   }
 }

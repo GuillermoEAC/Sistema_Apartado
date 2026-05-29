@@ -10,10 +10,6 @@
             </p>
         </div>
 
-        <button
-            class="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-            Agregar Usuario
-        </button>
     </div>
 
     <!-- Search -->
@@ -25,6 +21,7 @@
     </div>
 
     <p *ngIf="loading" class="text-gray-600 mb-4">Cargando usuarios...</p>
+    <p *ngIf="success" class="text-green-700 mb-4">{{ success }}</p>
     <p *ngIf="error" class="text-red-700 mb-4">{{ error }}</p>
 
     <!-- Table -->
@@ -103,11 +100,6 @@
 
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-center gap-2">
-                                <button class="p-2 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
-                                    title="Editar usuario">
-                                    Editar
-                                </button>
-
                                 <button (click)="handleDeleteUser(user.id)"
                                     class="p-2 text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                                     title="Eliminar usuario">

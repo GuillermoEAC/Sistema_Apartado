@@ -5,6 +5,7 @@ import { BloqueoHorario } from './entities/bloqueo.entity';
 import { User } from '../users/entities/user.entity';
 import { IsDateString, IsInt, IsOptional, IsString, Matches, Min } from 'class-validator';
 import { Type } from 'class-transformer';
+import { CentroComputo } from '../centros/entities/centro-computo.entity';
 
 export class CreateBloqueoDto {
     @IsOptional()
@@ -46,9 +47,12 @@ export class CreateBloqueoDto {
 
 @Injectable()
 export class BloqueosService {
-    constructor(@InjectRepository(BloqueoHorario) private repo: Repository<BloqueoHorario>) { }
+    constructor(
+        @InjectRepository(BloqueoHorario) private repo: Repository<BloqueoHorario>,
+        @InjectRepository(CentroComputo) private centroRepo: Repository<CentroComputo>,
+    ) { }
 
-    create(dto: CreateBloqueoDto, admin: User) {
+    async create(dto: CreateBloqueoDto, admin: User) {
         if (!dto.fecha_inicio && (!dto.date || !dto.startTime)) {
             throw new BadRequestException('Fecha y hora de inicio son requeridas');
         }
@@ -69,8 +73,16 @@ export class BloqueosService {
             throw new BadRequestException('La hora de inicio debe ser menor a la hora de fin');
         }
 
+        const centro = dto.id_centro
+            ? await this.centroRepo.findOne({ where: { id_centro: dto.id_centro, activo: true } })
+            : await this.centroRepo.findOne({ where: { activo: true }, order: { id_centro: 'ASC' } });
+
+        if (!centro) {
+            throw new BadRequestException('El centro de computo no existe o no esta disponible');
+        }
+
         const b = this.repo.create({
-            id_centro: dto.id_centro ?? 1,
+            id_centro: centro.id_centro,
             id_admin: admin.id_usuario,
             fecha_inicio: inicio,
             fecha_fin: fin,

@@ -16,6 +16,11 @@ export interface AuthResponse {
   user: AuthUser;
 }
 
+export interface FacultadOption {
+  id_facultad: number;
+  nombre: string;
+}
+
 /** Backend wraps all OK responses in { statusCode, message, data } */
 interface ApiWrapper<T> {
   statusCode: number;
@@ -81,6 +86,12 @@ export class AuthService {
         tap((response) => this.saveSession(response)),
         catchError((err) => throwError(() => err)),
       );
+  }
+
+  getFacultades() {
+    return this.http
+      .get<ApiWrapper<FacultadOption[]>>('http://localhost:3000/api/v1/facultades')
+      .pipe(map((response) => response.data));
   }
 
   // Logout

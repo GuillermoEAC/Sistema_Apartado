@@ -11,6 +11,7 @@ import { HistorialModule } from './modules/historial/historial.module';
 import { NotificacionesModule } from './modules/notificaciones/notificaciones.module';
 import { CentrosModule } from './modules/centros/centros.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { FacultadesModule } from './modules/facultades/facultades.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
     HistorialModule,
     NotificacionesModule,
     CentrosModule,
+    FacultadesModule,
     DashboardModule,
   ],
 })

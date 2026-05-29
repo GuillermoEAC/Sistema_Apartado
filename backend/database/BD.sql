@@ -31,13 +31,24 @@ CREATE TABLE IF NOT EXISTS usuario (
 
 -- =====================================================
 -- TABLA: centro_computo
--- Sala de cómputo disponible para reservar
+-- Sala de computo disponible para reservar
 -- =====================================================
 CREATE TABLE IF NOT EXISTS centro_computo (
   id_centro       INT           PRIMARY KEY AUTO_INCREMENT,
   nombre          VARCHAR(100)  NOT NULL,
   capacidad       SMALLINT      NOT NULL DEFAULT 30,
   descripcion     TEXT          NULL,
+  activo          BOOLEAN       NOT NULL DEFAULT TRUE,
+  created_at      DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =====================================================
+-- TABLA: facultad
+-- Catalogo de facultades o unidades academicas
+-- =====================================================
+CREATE TABLE IF NOT EXISTS facultad (
+  id_facultad     INT           PRIMARY KEY AUTO_INCREMENT,
+  nombre          VARCHAR(120)  NOT NULL UNIQUE,
   activo          BOOLEAN       NOT NULL DEFAULT TRUE,
   created_at      DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -158,10 +169,13 @@ INSERT INTO usuario (nombre, apellido1, correo, password_hash, rol) VALUES
  '$2b$10$c/.qHLlny/yJL5obCsG91.UwGMHArRhq41COSoUBNXYXGzdZutMa6', -- Hash de la contraseña '123456'
  'admin');
 
--- Sala de cómputo por defecto
+-- Sala de computo por defecto
 INSERT INTO centro_computo (nombre, capacidad, descripcion) VALUES
-('Sala de Cómputo A', 30, 'Sala principal con 30 equipos'),
-('Sala de Cómputo B', 25, 'Sala secundaria con 25 equipos');
+('Sala de computo Torre Academica', 30, 'Sala principal de la Torre Academica');
+
+-- Facultad por defecto
+INSERT INTO facultad (nombre) VALUES
+('Facultad de Ingenieria Mochis');
 
 -- =====================================================
 -- ÍNDICES para mejorar rendimiento en consultas

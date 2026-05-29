@@ -71,6 +71,12 @@
     cursor: not-allowed;
 }
 
+.field-note {
+    color: #64748b;
+    font-size: 0.86rem;
+    line-height: 1.45;
+}
+
 .requerimientos {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

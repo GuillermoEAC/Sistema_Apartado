@@ -1,0 +1,109 @@
+<section class="catalogs-page">
+    <div class="page-header">
+        <div>
+            <h2>Catálogos</h2>
+            <p>Administra las opciones disponibles para solicitudes y registros.</p>
+        </div>
+    </div>
+
+    <p *ngIf="loading" class="message neutral">Cargando catálogos...</p>
+    <p *ngIf="success" class="message success">{{ success }}</p>
+    <p *ngIf="error" class="message error">{{ error }}</p>
+
+    <div class="catalog-grid">
+        <article class="panel">
+            <header>
+                <h3>Centros de cómputo</h3>
+                <p>Los centros activos aparecen en el formulario de nueva solicitud.</p>
+            </header>
+
+            <form #centerNgForm="ngForm" class="form-grid" (ngSubmit)="saveCenter(centerNgForm)">
+                <label>
+                    Nombre
+                    <input name="centerName" required minlength="3" [(ngModel)]="centerForm.nombre"
+                        placeholder="Sala de computo Torre Academica" />
+                </label>
+
+                <label>
+                    Capacidad
+                    <input name="centerCapacity" type="number" min="1" required [(ngModel)]="centerForm.capacidad" />
+                </label>
+
+                <label class="full">
+                    Descripción
+                    <textarea name="centerDescription" rows="3" [(ngModel)]="centerForm.descripcion"
+                        placeholder="Descripción breve"></textarea>
+                </label>
+
+                <div class="actions full">
+                    <button type="submit" class="primary" [disabled]="savingCenter">
+                        {{ editingCenterId ? 'Guardar cambios' : 'Agregar centro' }}
+                    </button>
+                    <button *ngIf="editingCenterId" type="button" class="secondary"
+                        (click)="cancelCenterEdit(centerNgForm)">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+
+            <div class="list">
+                <div *ngFor="let center of centers" class="list-row">
+                    <div>
+                        <strong>{{ center.nombre }}</strong>
+                        <span>{{ center.capacidad }} equipos</span>
+                    </div>
+
+                    <div class="row-actions">
+                        <button type="button" class="secondary" (click)="editCenter(center)">Editar</button>
+                        <button type="button" [class.danger]="center.activo" [class.activate]="!center.activo"
+                            (click)="toggleCenter(center)">
+                            {{ center.activo ? 'Desactivar' : 'Activar' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="panel">
+            <header>
+                <h3>Facultades</h3>
+                <p>Las facultades activas aparecen en el registro de profesores.</p>
+            </header>
+
+            <form #facultyNgForm="ngForm" class="form-grid" (ngSubmit)="saveFaculty(facultyNgForm)">
+                <label class="full">
+                    Nombre
+                    <input name="facultyName" required minlength="3" [(ngModel)]="facultyForm.nombre"
+                        placeholder="Facultad de Ingenieria Mochis" />
+                </label>
+
+                <div class="actions full">
+                    <button type="submit" class="primary" [disabled]="savingFaculty">
+                        {{ editingFacultyId ? 'Guardar cambios' : 'Agregar facultad' }}
+                    </button>
+                    <button *ngIf="editingFacultyId" type="button" class="secondary"
+                        (click)="cancelFacultyEdit(facultyNgForm)">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+
+            <div class="list">
+                <div *ngFor="let faculty of faculties" class="list-row">
+                    <div>
+                        <strong>{{ faculty.nombre }}</strong>
+                        <span>{{ faculty.activo ? 'Disponible para registro' : 'Oculta en registro' }}</span>
+                    </div>
+
+                    <div class="row-actions">
+                        <button type="button" class="secondary" (click)="editFaculty(faculty)">Editar</button>
+                        <button type="button" [class.danger]="faculty.activo" [class.activate]="!faculty.activo"
+                            (click)="toggleFaculty(faculty)">
+                            {{ faculty.activo ? 'Desactivar' : 'Activar' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>

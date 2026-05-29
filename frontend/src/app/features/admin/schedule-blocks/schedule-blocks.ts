@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { AdminApiService } from '../../../core/services/admin-api.service';
+import { AdminApiService, CentroComputo } from '../../../core/services/admin-api.service';
 
 interface BlockedSchedule {
   id: string;
@@ -22,11 +22,13 @@ interface BlockedSchedule {
 export class ScheduleBlocks implements OnInit {
 
   blockedSchedules: BlockedSchedule[] = [];
+  centers: CentroComputo[] = [];
   loading = true;
   saving = false;
   error = '';
 
   formData = {
+    id_centro: 0,
     date: '',
     startTime: '',
     endTime: '',
@@ -44,6 +46,21 @@ export class ScheduleBlocks implements OnInit {
 
   loadBlocks(): void {
     this.loading = true;
+    this.adminApi.getCentersAdmin().subscribe({
+      next: (centers) => {
+        this.centers = centers.filter((center) => center.activo);
+        this.formData.id_centro = this.centers[0]?.id_centro ?? 0;
+        this.loadBlockedSchedules();
+      },
+      error: () => {
+        this.error = 'No se pudieron cargar los centros de computo.';
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  private loadBlockedSchedules(): void {
     this.adminApi.getBlocks().subscribe({
       next: (blocks) => {
         this.blockedSchedules = blocks.map((block) => this.mapBlock(block));
@@ -124,16 +141,27 @@ export class ScheduleBlocks implements OnInit {
 
     return {
       id: String(block.id_bloqueo),
-      date: start.toISOString().slice(0, 10),
-      startTime: start.toTimeString().slice(0, 5),
-      endTime: end.toTimeString().slice(0, 5),
+      date: this.formatInputDate(start),
+      startTime: this.formatInputTime(start),
+      endTime: this.formatInputTime(end),
       reason: block.motivo,
       createdBy: admin,
     };
   }
 
+  private formatInputDate(date: Date): string {
+    const pad = (value: number) => String(value).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  }
+
+  private formatInputTime(date: Date): string {
+    const pad = (value: number) => String(value).padStart(2, '0');
+    return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  }
+
   private emptyForm() {
     return {
+      id_centro: this.centers[0]?.id_centro ?? 0,
       date: '',
       startTime: '',
       endTime: '',

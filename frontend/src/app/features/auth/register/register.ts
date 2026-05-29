@@ -1,17 +1,17 @@
-import { NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService, FacultadOption } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, NgIf],
+  imports: [RouterLink, ReactiveFormsModule, NgIf, NgFor],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -19,14 +19,30 @@ export class RegisterComponent {
   errorMessage = '';
   successMessage = '';
   isSubmitting = false;
+  facultades: FacultadOption[] = [];
 
   form = this.fb.group({
     nombreCompleto: ['', [Validators.required, Validators.minLength(4)]],
-    correo: ['', [Validators.required, Validators.email]],
+    correo: ['', [Validators.required, Validators.email, Validators.pattern(/^[a-zA-Z0-9._%+-]+@uas\.edu\.mx$/i)]],
     facultad: ['', [Validators.required, Validators.minLength(2)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmar: ['', [Validators.required]],
   });
+
+  ngOnInit(): void {
+    this.authService.getFacultades().subscribe({
+      next: (facultades) => {
+        this.facultades = facultades;
+        if (facultades.length === 1) {
+          this.form.patchValue({ facultad: facultades[0].nombre });
+        }
+      },
+      error: () => {
+        this.facultades = [{ id_facultad: 0, nombre: 'Facultad de Ingenieria Mochis' }];
+        this.form.patchValue({ facultad: this.facultades[0].nombre });
+      },
+    });
+  }
 
   submit() {
     this.errorMessage = '';
@@ -34,7 +50,7 @@ export class RegisterComponent {
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.errorMessage = 'Completa todos los campos correctamente.';
+      this.errorMessage = 'Completa todos los campos correctamente. El correo debe terminar en @uas.edu.mx.';
       return;
     }
 
