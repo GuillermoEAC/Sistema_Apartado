@@ -18,6 +18,21 @@
             </header>
 
             <form #centerNgForm="ngForm" class="form-grid" (ngSubmit)="saveCenter(centerNgForm)">
+                <label class="full">
+                    Facultad
+                    <select name="centerFaculty" required [(ngModel)]="centerForm.id_facultad">
+                        <option [ngValue]="0" disabled>Selecciona una facultad</option>
+                        <option *ngFor="let faculty of faculties" [ngValue]="faculty.id_facultad">
+                            {{ faculty.nombre }}
+                        </option>
+                    </select>
+                </label>
+
+                <label class="check full">
+                    <input type="checkbox" name="centerGeneral" [(ngModel)]="centerForm.es_general" />
+                    Aula general disponible para todas las facultades
+                </label>
+
                 <label>
                     Nombre
                     <input name="centerName" required minlength="3" [(ngModel)]="centerForm.nombre"
@@ -50,7 +65,10 @@
                 <div *ngFor="let center of centers" class="list-row">
                     <div>
                         <strong>{{ center.nombre }}</strong>
-                        <span>{{ center.capacidad }} equipos</span>
+                        <span>
+                            {{ center.es_general ? 'General' : (center.facultad?.nombre ?? 'Sin facultad') }}
+                            · {{ center.capacidad }} equipos
+                        </span>
                     </div>
 
                     <div class="row-actions">

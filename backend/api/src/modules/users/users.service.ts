@@ -64,7 +64,7 @@ export class UsersService {
         return this.repo
             .createQueryBuilder('u')
             .addSelect('u.password_hash')
-            .where('u.correo = :correo', { correo })
+            .where('LOWER(u.correo) = LOWER(:correo)', { correo: correo.trim() })
             .getOne();
     }
 
@@ -78,12 +78,14 @@ export class UsersService {
         facultad?: string;
         rol?: UserRole;
     }) {
-        const existing = await this.findByEmail(data.correo);
+        const correo = data.correo.trim().toLowerCase();
+        const existing = await this.findByEmail(correo);
         if (existing) throw new BadRequestException('El correo ya está registrado');
 
         const hash = await bcrypt.hash(data.password, 10);
         const user = this.repo.create({
             ...data,
+            correo,
             password_hash: hash,
             rol: data.rol ?? UserRole.PROFESOR,
         });

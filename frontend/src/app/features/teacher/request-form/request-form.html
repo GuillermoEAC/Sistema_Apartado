@@ -122,11 +122,14 @@
         </section>
 
         <p *ngIf="loadingCenters" class="text-gray-600">Cargando centros...</p>
+        <p *ngIf="!loadingCenters && centers.length === 0" class="text-red-700">
+            No hay centros activos asignados a tu facultad.
+        </p>
         <p *ngIf="success" class="text-green-700">{{ success }}</p>
         <p *ngIf="error" class="text-red-700">{{ error }}</p>
 
         <div class="acciones">
-            <button type="submit" class="boton-principal" [disabled]="requestForm.invalid || saving || loadingCenters">
+            <button type="submit" class="boton-principal" [disabled]="requestForm.invalid || saving || loadingCenters || centers.length === 0">
                 {{ saving ? 'Enviando...' : 'Enviar solicitud' }}
             </button>
         </div>

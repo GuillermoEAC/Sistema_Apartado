@@ -39,8 +39,8 @@ export class TeacherApiService {
     return this.get<any>('dashboard/profesor');
   }
 
-  getCenters() {
-    return this.get<any[]>('centros');
+  getCenters(facultad?: string) {
+    return this.get<any[]>('centros', { facultad });
   }
 
   createRequest(payload: CreateSolicitudPayload) {

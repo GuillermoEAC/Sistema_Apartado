@@ -71,12 +71,24 @@ label {
     font-weight: 700;
 }
 
+.check {
+    flex-direction: row;
+    align-items: center;
+    font-weight: 700;
+}
+
+.check input {
+    width: 18px;
+    height: 18px;
+}
+
 .full {
     grid-column: 1 / -1;
 }
 
 input,
-textarea {
+textarea,
+select {
     border: 1px solid #cbd5e1;
     border-radius: 12px;
     padding: 12px 14px;
@@ -85,7 +97,8 @@ textarea {
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
     outline: none;
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);

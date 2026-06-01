@@ -63,10 +63,12 @@ export class Catalogs implements OnInit {
     this.success = '';
 
     const payload = {
+      id_facultad: Number(this.centerForm.id_facultad),
       nombre: this.centerForm.nombre.trim(),
       capacidad: Number(this.centerForm.capacidad),
       descripcion: this.centerForm.descripcion.trim(),
       activo: true,
+      es_general: Boolean(this.centerForm.es_general),
     };
 
     const request = this.editingCenterId
@@ -91,9 +93,11 @@ export class Catalogs implements OnInit {
   editCenter(center: CentroComputo): void {
     this.editingCenterId = center.id_centro;
     this.centerForm = {
+      id_facultad: center.id_facultad ?? center.facultad?.id_facultad ?? this.faculties[0]?.id_facultad ?? 0,
       nombre: center.nombre,
       capacidad: center.capacidad,
       descripcion: center.descripcion ?? '',
+      es_general: Boolean(center.es_general),
     };
   }
 
@@ -182,6 +186,9 @@ export class Catalogs implements OnInit {
     this.adminApi.getFacultiesAdmin().subscribe({
       next: (faculties) => {
         this.faculties = faculties;
+        if (!this.centerForm.id_facultad && faculties.length > 0) {
+          this.centerForm.id_facultad = faculties[0].id_facultad;
+        }
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -195,9 +202,11 @@ export class Catalogs implements OnInit {
 
   private emptyCenter() {
     return {
+      id_facultad: this.faculties[0]?.id_facultad ?? 0,
       nombre: '',
       capacidad: 30,
       descripcion: '',
+      es_general: false,
     };
   }
 

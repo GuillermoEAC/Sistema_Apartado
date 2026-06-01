@@ -30,7 +30,7 @@ export class RequestFormComponent implements OnInit {
   ngOnInit(): void {
     this.formData.facultad = this.currentFaculty();
 
-    this.teacherApi.getCenters().subscribe({
+    this.teacherApi.getCenters(this.formData.facultad).subscribe({
       next: (centers) => {
         this.centers = this.prioritizeMainCenter(centers);
         this.formData.id_centro = this.centers[0]?.id_centro ?? 1;
@@ -38,7 +38,7 @@ export class RequestFormComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: () => {
-        this.error = 'No se pudieron cargar los centros de cómputo.';
+        this.error = 'No se pudieron cargar los centros de cómputo de tu facultad.';
         this.loadingCenters = false;
         this.cdr.detectChanges();
       },

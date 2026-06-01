@@ -18,10 +18,13 @@ export interface PaginatedResponse<T> {
 
 export interface CentroComputo {
   id_centro: number;
+  id_facultad?: number | null;
   nombre: string;
   capacidad: number;
   descripcion?: string;
   activo: boolean;
+  es_general: boolean;
+  facultad?: Facultad | null;
 }
 
 export interface Facultad {
@@ -88,11 +91,11 @@ export class AdminApiService {
     return this.get<CentroComputo[]>('centros/admin');
   }
 
-  createCenter(payload: { nombre: string; capacidad: number; descripcion?: string; activo?: boolean }) {
+  createCenter(payload: { id_facultad: number; nombre: string; capacidad: number; descripcion?: string; activo?: boolean; es_general?: boolean }) {
     return this.post<CentroComputo>('centros', payload);
   }
 
-  updateCenter(id: number, payload: { nombre?: string; capacidad?: number; descripcion?: string; activo?: boolean }) {
+  updateCenter(id: number, payload: { id_facultad?: number; nombre?: string; capacidad?: number; descripcion?: string; activo?: boolean; es_general?: boolean }) {
     return this.patch<CentroComputo>(`centros/${id}`, payload);
   }
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
@@ -13,8 +13,8 @@ export class CentrosController {
 
     @Get()
     @ApiOperation({ summary: 'Listar centros activos' })
-    findActive() {
-        return this.service.findActive();
+    findActive(@Query('facultad') facultad?: string) {
+        return this.service.findActive(facultad);
     }
 
     @ApiBearerAuth()
@@ -58,4 +58,5 @@ export class CentrosController {
     toggleActive(@Param('id', ParseIntPipe) id: number) {
         return this.service.toggleActive(id);
     }
+
 }

@@ -1,16 +1,21 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcryptjs';
 import { User, UserRole } from '../users/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Facultad } from '../facultades/entities/facultad.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
     constructor(
         private usersService: UsersService,
         private jwtService: JwtService,
+        @InjectRepository(Facultad)
+        private facultadRepo: Repository<Facultad>,
     ) { }
 
     async login(loginDto: LoginDto) {
@@ -29,8 +34,16 @@ export class AuthService {
     }
 
     async register(registerDto: RegisterDto) {
+        const facultad = await this.facultadRepo.findOne({
+            where: { nombre: registerDto.facultad, activo: true },
+        });
+        if (!facultad) {
+            throw new BadRequestException('La facultad seleccionada no está disponible');
+        }
+
         const user = await this.usersService.create({
             ...registerDto,
+            facultad: facultad.nombre,
             rol: UserRole.PROFESOR,
         });
 

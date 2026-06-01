@@ -1,21 +1,30 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CentroComputo } from './entities/centro-computo.entity';
 import { CreateCentroComputoDto, UpdateCentroComputoDto } from './dto/centro-computo.dto';
+import { Facultad } from '../facultades/entities/facultad.entity';
 
 @Injectable()
 export class CentrosService {
     constructor(
         @InjectRepository(CentroComputo)
         private readonly repo: Repository<CentroComputo>,
+        @InjectRepository(Facultad)
+        private readonly facultadRepo: Repository<Facultad>,
     ) { }
 
-    findActive() {
-        return this.repo.find({
-            where: { activo: true },
-            order: { nombre: 'ASC' },
-        });
+    findActive(facultad?: string) {
+        const qb = this.repo.createQueryBuilder('c')
+            .leftJoinAndSelect('c.facultad', 'f')
+            .where('c.activo = :activo', { activo: true })
+            .orderBy('c.nombre', 'ASC');
+
+        if (facultad) {
+            qb.andWhere('(f.nombre = :facultad OR c.es_general = true)', { facultad });
+        }
+
+        return qb.getMany();
     }
 
     findAll() {
@@ -28,16 +37,21 @@ export class CentrosService {
         return centro;
     }
 
-    create(dto: CreateCentroComputoDto) {
+    async create(dto: CreateCentroComputoDto) {
+        await this.ensureFaculty(dto.id_facultad);
         const centro = this.repo.create({
             ...dto,
             activo: dto.activo ?? true,
+            es_general: dto.es_general ?? false,
         });
         return this.repo.save(centro);
     }
 
     async update(id: number, dto: UpdateCentroComputoDto) {
         await this.findOne(id);
+        if (dto.id_facultad) {
+            await this.ensureFaculty(dto.id_facultad);
+        }
         await this.repo.update(id, dto);
         return this.findOne(id);
     }
@@ -46,5 +60,14 @@ export class CentrosService {
         const centro = await this.findOne(id);
         await this.repo.update(id, { activo: !centro.activo });
         return this.findOne(id);
+    }
+
+    private async ensureFaculty(id_facultad: number) {
+        const facultad = await this.facultadRepo.findOne({
+            where: { id_facultad, activo: true },
+        });
+        if (!facultad) {
+            throw new BadRequestException('La facultad no existe o no esta disponible');
+        }
     }
 }
